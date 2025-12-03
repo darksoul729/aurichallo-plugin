@@ -1,0 +1,361 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║    🪟 AURIC HALO - WINDOWS RELEASE BUILD GUIDE 🪟        ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+CARA BUILD RELEASE VERSION UNTUK DISTRIBUSI
+
+═══════════════════════════════════════════════════════════
+
+📋 PERBEDAAN DEBUG vs RELEASE:
+
+DEBUG MODE:
+- Untuk development & testing
+- File size besar (~50-100MB)
+- Ada debug symbols
+- Tidak dioptimasi
+- Lambat
+- Banyak logging
+
+RELEASE MODE:
+- Untuk distribusi ke user
+- File size kecil (~5-20MB)
+- Tidak ada debug symbols
+- Fully optimized
+- Cepat
+- Minimal logging
+
+═══════════════════════════════════════════════════════════
+
+🔨 CARA BUILD RELEASE DI VISUAL STUDIO:
+
+METHOD 1: Via Toolbar (Paling Mudah)
+1. Buka AuricHalo.sln di Visual Studio
+2. Di toolbar atas, ubah "Debug" → "Release"
+3. Ubah "x86" → "x64" (jika belum)
+4. Build → Rebuild Solution (Ctrl+Shift+B)
+5. Tunggu sampai selesai
+
+METHOD 2: Via Menu
+1. Build → Configuration Manager
+2. Active solution configuration: Release
+3. Platform: x64
+4. Close
+5. Build → Rebuild Solution
+
+METHOD 3: Via Project Properties
+1. Right-click project → Properties
+2. Configuration: Release
+3. Platform: x64
+4. Apply → OK
+5. Build → Rebuild Solution
+
+═══════════════════════════════════════════════════════════
+
+📁 LOKASI FILE RELEASE:
+
+VST3:
+Builds\VisualStudio2022\x64\Release\VST3\AuricHalo.vst3
+
+Standalone:
+Builds\VisualStudio2022\x64\Release\Standalone Plugin\AuricHalo.exe
+
+AAX (jika ada AAX SDK):
+Builds\VisualStudio2022\x64\Release\AAX\AuricHalo.aaxplugin
+
+═══════════════════════════════════════════════════════════
+
+📦 CARA MEMBUAT INSTALLER WINDOWS:
+
+OPTION 1: Inno Setup (RECOMMENDED - Free & Easy)
+
+1. DOWNLOAD INNO SETUP
+   https://jrsoftware.org/isdl.php
+   - Free & open source
+   - Professional installers
+   - Easy to use
+
+2. INSTALL INNO SETUP
+   - Download & install
+   - Launch Inno Setup Compiler
+
+3. CREATE INSTALLER SCRIPT
+   - File → New
+   - Follow wizard atau use script yang sudah dibuat
+   - File: installers/windows/AuricHalo_Setup.iss
+
+4. COMPILE INSTALLER
+   - Build → Compile (Ctrl+F9)
+   - Output: AuricHalo-Setup.exe
+
+OPTION 2: NSIS (Advanced)
+
+1. DOWNLOAD NSIS
+   https://nsis.sourceforge.io/
+   - Free & powerful
+   - More complex
+
+2. CREATE SCRIPT
+   - Use .nsi script
+   - File: installers/windows/auric_halo_installer.nsi
+
+3. COMPILE
+   - Right-click .nsi → Compile NSIS Script
+   - Output: AuricHalo-Installer.exe
+
+OPTION 3: WiX Toolset (Professional)
+
+1. DOWNLOAD WiX
+   https://wixtoolset.org/
+   - Professional MSI installers
+   - Complex but powerful
+
+2. CREATE WiX PROJECT
+   - XML-based configuration
+   - Integrate with Visual Studio
+
+3. BUILD MSI
+   - Build WiX project
+   - Output: AuricHalo.msi
+
+═══════════════════════════════════════════════════════════
+
+🎯 QUICK INSTALLER DENGAN INNO SETUP:
+
+LANGKAH CEPAT:
+
+1. Build Release version dulu
+2. Download & install Inno Setup
+3. Buka: installers/windows/AuricHalo_Setup.iss
+4. Edit paths jika perlu
+5. Build → Compile
+6. Dapat: AuricHalo-Setup.exe
+
+INSTALLER AKAN:
+✅ Install VST3 ke: C:\Program Files\Common Files\VST3\
+✅ Install Standalone ke: C:\Program Files\Auric Audio\Auric Halo\
+✅ Create Start Menu shortcuts
+✅ Create Desktop shortcut (optional)
+✅ Create Uninstaller
+✅ Show license agreement
+✅ Professional look & feel
+
+═══════════════════════════════════════════════════════════
+
+📝 CHECKLIST SEBELUM RELEASE:
+
+TESTING:
+[ ] Build Release version sukses
+[ ] Test VST3 di berbagai DAW
+[ ] Test Standalone app
+[ ] Test di Windows 10
+[ ] Test di Windows 11
+[ ] Test dengan berbagai audio interfaces
+[ ] Test semua parameters
+[ ] Test automation
+[ ] Test preset save/load
+[ ] No crashes
+[ ] No audio glitches
+
+OPTIMIZATION:
+[ ] File size reasonable (<20MB)
+[ ] CPU usage acceptable (<10%)
+[ ] Memory usage acceptable (<50MB)
+[ ] Fast loading time
+[ ] Smooth UI
+
+DOCUMENTATION:
+[ ] User manual ready
+[ ] Installation guide ready
+[ ] System requirements documented
+[ ] Known issues documented
+[ ] Support contact ready
+
+LEGAL:
+[ ] License agreement ready
+[ ] EULA ready
+[ ] Privacy policy (if needed)
+[ ] Terms of service (if needed)
+
+═══════════════════════════════════════════════════════════
+
+🔐 CODE SIGNING (Optional tapi Recommended):
+
+KENAPA PERLU CODE SIGNING?
+- Windows tidak akan warning "Unknown Publisher"
+- User lebih percaya
+- Lebih professional
+- Tidak di-block oleh antivirus
+
+CARA DAPAT CODE SIGNING CERTIFICATE:
+1. Beli dari Certificate Authority:
+   - DigiCert (~$400/year)
+   - Sectigo (~$200/year)
+   - GlobalSign (~$300/year)
+
+2. Sign executable:
+   signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com AuricHalo-Setup.exe
+
+ALTERNATIF (Gratis):
+- Self-signed certificate (untuk testing)
+- Tidak recommended untuk distribusi publik
+
+═══════════════════════════════════════════════════════════
+
+📊 FILE SIZE COMPARISON:
+
+Debug Build:
+- VST3: ~80-100 MB
+- Standalone: ~50-80 MB
+- Total: ~150 MB
+
+Release Build:
+- VST3: ~5-10 MB
+- Standalone: ~8-15 MB
+- Total: ~20 MB
+
+Installer:
+- Compressed: ~10-15 MB
+- Installed: ~20-30 MB
+
+═══════════════════════════════════════════════════════════
+
+🚀 DISTRIBUTION OPTIONS:
+
+OPTION 1: Direct Download
+- Host installer di website Anda
+- Users download & install
+- Full control
+- No revenue share
+
+OPTION 2: Plugin Stores
+- Plugin Boutique
+- Splice Sounds
+- Native Instruments Community
+- Revenue share: 30-50%
+
+OPTION 3: Subscription Platforms
+- Splice Rent-to-Own
+- Plugin Alliance
+- Waves Central
+- Monthly revenue
+
+OPTION 4: Bundle with DAW
+- Contact DAW developers
+- Include in DAW bundle
+- Wider reach
+
+═══════════════════════════════════════════════════════════
+
+💰 PRICING STRATEGIES:
+
+FREE:
+- Build user base
+- Get feedback
+- Marketing tool
+- Upsell to paid version
+
+PAID:
+- One-time purchase: $29-$99
+- Subscription: $5-$15/month
+- Rent-to-own: $10/month for 12 months
+
+FREEMIUM:
+- Free basic version
+- Paid pro version with more features
+- Best of both worlds
+
+═══════════════════════════════════════════════════════════
+
+📞 SUPPORT & UPDATES:
+
+SUPPORT CHANNELS:
+- Email support
+- FAQ page
+- Video tutorials
+- User forum
+- Discord community
+
+UPDATE MECHANISM:
+- Manual download (simple)
+- Auto-update checker (better)
+- Installer with update option (best)
+
+VERSION NUMBERING:
+- Major.Minor.Patch (1.0.0)
+- Increment patch for bug fixes
+- Increment minor for features
+- Increment major for big changes
+
+═══════════════════════════════════════════════════════════
+
+🎯 RELEASE CHECKLIST:
+
+PRE-RELEASE:
+[ ] Build Release version
+[ ] Test thoroughly
+[ ] Create installer
+[ ] Test installer
+[ ] Prepare documentation
+[ ] Prepare marketing materials
+[ ] Set up website/landing page
+[ ] Set up payment system (if paid)
+
+RELEASE DAY:
+[ ] Upload installer to server
+[ ] Publish website
+[ ] Announce on social media
+[ ] Email mailing list
+[ ] Post on forums (KVR, Gearspace)
+[ ] Submit to plugin directories
+
+POST-RELEASE:
+[ ] Monitor for bugs
+[ ] Respond to support requests
+[ ] Collect feedback
+[ ] Plan updates
+[ ] Track downloads/sales
+
+═══════════════════════════════════════════════════════════
+
+📁 RECOMMENDED FOLDER STRUCTURE:
+
+Release/
+├── AuricHalo-1.0.0-Setup.exe      # Installer
+├── AuricHalo-1.0.0-Portable.zip   # Portable version
+├── AuricHalo-UserManual.pdf       # Documentation
+├── AuricHalo-QuickStart.pdf       # Quick guide
+├── LICENSE.txt                     # License
+└── CHANGELOG.txt                   # Version history
+
+═══════════════════════════════════════════════════════════
+
+✅ QUICK STEPS SUMMARY:
+
+1. BUILD RELEASE
+   - Visual Studio → Release mode
+   - Build → Rebuild Solution
+
+2. TEST RELEASE
+   - Test VST3 di DAW
+   - Test Standalone
+   - Verify no issues
+
+3. CREATE INSTALLER
+   - Use Inno Setup (recommended)
+   - Compile installer script
+   - Test installer
+
+4. DISTRIBUTE
+   - Upload to website
+   - Announce release
+   - Provide support
+
+═══════════════════════════════════════════════════════════
+
+SELAMAT! SIAP UNTUK RELEASE! 🎉
+
+Follow langkah-langkah di atas untuk release version!
+
+═══════════════════════════════════════════════════════════

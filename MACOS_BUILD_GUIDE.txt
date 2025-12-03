@@ -1,0 +1,320 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║       🍎 AURIC HALO - macOS BUILD SETUP 🍎               ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+PROJECT SUDAH DIKONFIGURASI UNTUK macOS!
+
+═══════════════════════════════════════════════════════════
+
+✅ YANG SUDAH DIKONFIGURASI:
+
+Plugin Formats:
+✅ AAX (Pro Tools)
+✅ AU (Audio Unit - macOS native)
+✅ VST3 (Universal)
+✅ Standalone
+
+macOS Settings:
+✅ Universal Binary (Intel + Apple Silicon)
+✅ macOS 10.13+ compatibility
+✅ Xcode project configured
+✅ Code signing ready
+✅ Notarization ready
+
+═══════════════════════════════════════════════════════════
+
+🖥️  SYSTEM REQUIREMENTS (macOS):
+
+Hardware:
+- Mac dengan Intel atau Apple Silicon
+- 8GB RAM minimum
+- 2GB free disk space
+
+Software:
+- macOS 10.15+ (untuk development)
+- Xcode 12+ (free dari App Store)
+- JUCE Framework
+- Command Line Tools
+
+═══════════════════════════════════════════════════════════
+
+📋 LANGKAH BUILD DI macOS:
+
+1. INSTALL PREREQUISITES
+   # Install Xcode dari App Store
+   # Install Command Line Tools
+   xcode-select --install
+
+2. SETUP JUCE
+   # Download JUCE dari juce.com
+   # Extract ke ~/JUCE atau /Applications/JUCE
+
+3. COPY PROJECT
+   # Copy folder AuricHalo ke Mac
+   # Via USB, cloud, atau git
+
+4. OPEN PROJUCER
+   # Launch Projucer di Mac
+   # File → Open → AuricHalo.jucer
+
+5. SET PATHS
+   # File → Global Paths
+   # Set JUCE Modules path
+   # Set AAX SDK path (jika ada)
+
+6. GENERATE XCODE PROJECT
+   # Save Project (Cmd+Shift+S)
+   # Projucer akan generate Xcode project
+
+7. BUILD DI XCODE
+   # Open: Builds/MacOSX/AuricHalo.xcodeproj
+   # Select scheme: AuricHalo - All
+   # Product → Build (Cmd+B)
+
+8. HASIL BUILD
+   VST3: ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+   AU: ~/Library/Audio/Plug-Ins/Components/AuricHalo.component
+   AAX: ~/Library/Application Support/Avid/Audio/Plug-Ins/AuricHalo.aaxplugin
+   Standalone: Applications/AuricHalo.app
+
+═══════════════════════════════════════════════════════════
+
+🚀 QUICK BUILD SCRIPT (macOS):
+
+Jalankan script ini di Terminal:
+
+#!/bin/bash
+# Build Auric Halo for macOS
+
+echo "🍎 Building Auric Halo for macOS..."
+
+# Navigate to project
+cd ~/AuricHalo  # Adjust path
+
+# Generate Xcode project (if Projucer in PATH)
+# Projucer --resave AuricHalo.jucer
+
+# Build with xcodebuild
+cd Builds/MacOSX
+xcodebuild -project AuricHalo.xcodeproj -scheme "AuricHalo - All" -configuration Release
+
+echo "✅ Build complete!"
+echo "Plugins installed to:"
+echo "VST3: ~/Library/Audio/Plug-Ins/VST3/"
+echo "AU: ~/Library/Audio/Plug-Ins/Components/"
+
+═══════════════════════════════════════════════════════════
+
+📦 INSTALLER CREATION:
+
+1. BASIC PKG (Simple)
+   # Use Packages app (free)
+   # Or pkgbuild command line
+
+2. ADVANCED INSTALLER
+   # Use install script yang sudah dibuat
+   # Automatic plugin installation
+   # User-friendly interface
+
+3. DMG CREATION
+   # Create disk image
+   # Drag & drop installer
+   # Professional presentation
+
+═══════════════════════════════════════════════════════════
+
+🔐 CODE SIGNING & NOTARIZATION:
+
+UNTUK DISTRIBUSI PUBLIK:
+
+1. APPLE DEVELOPER ACCOUNT
+   - $99/year
+   - Required untuk distribution
+   - Get Developer ID certificate
+
+2. CODE SIGNING
+   codesign --force --verify --verbose --sign "Developer ID Application: Your Name" AuricHalo.vst3
+
+3. NOTARIZATION
+   xcrun notarytool submit AuricHalo.pkg --keychain-profile "AC_PASSWORD" --wait
+
+4. STAPLING
+   xcrun stapler staple AuricHalo.pkg
+
+═══════════════════════════════════════════════════════════
+
+📁 FILE LOCATIONS (macOS):
+
+Development:
+~/AuricHalo/                           # Project folder
+~/AuricHalo/Builds/MacOSX/             # Xcode project
+
+User Plugins:
+~/Library/Audio/Plug-Ins/VST3/        # VST3 plugins
+~/Library/Audio/Plug-Ins/Components/  # AU plugins
+~/Library/Application Support/Avid/Audio/Plug-Ins/  # AAX plugins
+
+System Plugins (Admin):
+/Library/Audio/Plug-Ins/VST3/
+/Library/Audio/Plug-Ins/Components/
+/Library/Application Support/Avid/Audio/Plug-Ins/
+
+Applications:
+/Applications/AuricHalo.app            # Standalone
+
+═══════════════════════════════════════════════════════════
+
+🧪 TESTING CHECKLIST (macOS):
+
+DAW Compatibility:
+[ ] Logic Pro (AU + VST3)
+[ ] Pro Tools (AAX)
+[ ] Ableton Live (VST3)
+[ ] Cubase (VST3)
+[ ] Studio One (VST3)
+[ ] Reaper (VST3 + AU)
+[ ] GarageBand (AU)
+
+System Testing:
+[ ] Intel Mac
+[ ] Apple Silicon Mac (M1/M2)
+[ ] macOS 10.13 (if available)
+[ ] macOS 11 Big Sur
+[ ] macOS 12 Monterey
+[ ] macOS 13 Ventura
+[ ] macOS 14 Sonoma
+
+Plugin Formats:
+[ ] VST3 loads & works
+[ ] AU loads & works
+[ ] AAX loads & works (Pro Tools)
+[ ] Standalone launches & works
+
+═══════════════════════════════════════════════════════════
+
+⚠️  COMMON ISSUES & SOLUTIONS:
+
+ISSUE: "Xcode project won't open"
+SOLUTION:
+- Update Xcode to latest version
+- Re-save project in Projucer
+- Check macOS compatibility settings
+
+ISSUE: "Plugin won't load in DAW"
+SOLUTION:
+- Check plugin is in correct folder
+- Rescan plugins in DAW
+- Check plugin is signed (for Gatekeeper)
+- Check DAW supports plugin format
+
+ISSUE: "Build errors in Xcode"
+SOLUTION:
+- Check JUCE path in Projucer
+- Clean build folder (Cmd+Shift+K)
+- Check deployment target (10.13+)
+- Update Xcode Command Line Tools
+
+ISSUE: "Plugin blocked by Gatekeeper"
+SOLUTION:
+- Right-click plugin → Open
+- Or disable Gatekeeper temporarily:
+  sudo spctl --master-disable
+
+═══════════════════════════════════════════════════════════
+
+💡 DEVELOPMENT TIPS:
+
+FASTER BUILDS:
+- Build only needed formats during development
+- Use Debug configuration for testing
+- Use Release for final builds
+
+DEBUGGING:
+- Use Xcode debugger
+- Console.app for crash logs
+- Activity Monitor for performance
+
+TESTING:
+- Test in multiple DAWs
+- Test on different Mac models
+- Test with different audio interfaces
+
+═══════════════════════════════════════════════════════════
+
+📊 BUILD CONFIGURATIONS:
+
+Debug:
+- Faster compilation
+- Debug symbols included
+- No optimization
+- Larger file size
+
+Release:
+- Slower compilation
+- Optimized code
+- Smaller file size
+- Better performance
+- Strip debug symbols
+
+═══════════════════════════════════════════════════════════
+
+🎯 DISTRIBUTION OPTIONS:
+
+OPTION 1: Direct Download
+- Host .pkg file on website
+- Users download & install manually
+- Requires code signing for trust
+
+OPTION 2: Mac App Store
+- Requires Mac App Store guidelines compliance
+- Apple handles distribution
+- 30% revenue share to Apple
+- Strict review process
+
+OPTION 3: Third-party Stores
+- Plugin Boutique
+- Native Instruments Community
+- Splice Sounds
+- Various revenue shares
+
+═══════════════════════════════════════════════════════════
+
+📞 RESOURCES:
+
+Apple Developer:
+https://developer.apple.com/
+
+JUCE Documentation:
+https://docs.juce.com/
+
+Xcode:
+https://developer.apple.com/xcode/
+
+Packages (PKG creator):
+http://s.sudre.free.fr/Software/Packages/about.html
+
+═══════════════════════════════════════════════════════════
+
+✅ CURRENT STATUS:
+
+Project: ✅ CONFIGURED FOR macOS
+Xcode Project: ✅ READY TO GENERATE
+Plugin Formats: ✅ AU + VST3 + AAX + Standalone
+Universal Binary: ✅ Intel + Apple Silicon
+Code Signing: ✅ READY (need certificate)
+
+NEXT STEPS:
+1. Copy project ke Mac
+2. Install Xcode & JUCE
+3. Generate Xcode project
+4. Build & test!
+
+═══════════════════════════════════════════════════════════
+
+SELAMAT! PROJECT SIAP UNTUK macOS! 🍎
+
+Transfer ke Mac dan ikuti langkah-langkah di atas!
+
+═══════════════════════════════════════════════════════════

@@ -1,0 +1,13 @@
+build/
+*.user
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+cmake-build-*/
+.vs/
+Builds/**/.vs/
+*.vsidx
+Builds/

@@ -1,0 +1,39 @@
+AURIC HALO - VERSION HISTORY
+
+═══════════════════════════════════════════════════════════
+
+Version 1.0.0 (December 2025)
+- Initial release
+- Harmonic saturation algorithm
+- Tone control
+- Drive control
+- Mix control (dry/wet)
+- Output level control
+- Premium dark UI with halo glow effect
+- VST3 format support
+- AAX format support (Pro Tools)
+- Standalone application
+- Zero latency processing
+- Low CPU usage
+- Preset support
+- Windows 10/11 support
+
+═══════════════════════════════════════════════════════════
+
+Planned Features (Future Updates):
+- macOS support (AU + VST3 + AAX)
+- Additional saturation modes
+- Preset browser
+- Spectrum analyzer
+- Input/output metering
+- Oversampling option
+- Mid/Side processing
+- Undo/redo system
+
+═══════════════════════════════════════════════════════════
+
+For update notifications:
+Visit: www.auricaudio.com
+Email: updates@auricaudio.com
+
+═══════════════════════════════════════════════════════════

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuricHaloPreset version="1.0">
+  <Parameters>
+    <Parameter id="gain" value="0.0"/>
+    <Parameter id="mix" value="100.0"/>
+  </Parameters>
+</AuricHaloPreset>

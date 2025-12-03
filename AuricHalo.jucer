@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="AuHa01" name="AuricHalo" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginFormats="buildAAX,buildAU,buildVST3,buildStandalone"
+              version="1.0.0" companyName="Auric Audio" pluginManufacturerCode="Aurc"
+              pluginCode="AuHa" pluginChannelConfigs="{1,1},{2,2}" pluginIsSynth="0"
+              pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0"
+              pluginVST3Category="Fx"
+              pluginEditorRequiresKeys="0" pluginAUExportPrefix="AuricHaloAU"
+              pluginRTASCategory="2" aaxIdentifier="com.auricaudio.aurichalo"
+              pluginAAXCategory="2" bundleIdentifier="com.auricaudio.aurichalo"
+              pluginAAXDisableBypass="0" pluginAAXDisableMultiMono="0">
+  <MAINGROUP id="MainGrp" name="AuricHalo">
+    <GROUP id="{DSP001}" name="DSP">
+      <FILE id="dsp001" name="HaloEQ.cpp" compile="1" resource="0" file="source/DSP/HaloEQ.cpp"/>
+      <FILE id="dsp002" name="HaloEQ.h" compile="0" resource="0" file="source/DSP/HaloEQ.h"/>
+      <FILE id="dsp003" name="HaloCompressor.cpp" compile="1" resource="0"
+            file="source/DSP/HaloCompressor.cpp"/>
+      <FILE id="dsp004" name="HaloCompressor.h" compile="0" resource="0"
+            file="source/DSP/HaloCompressor.h"/>
+      <FILE id="dsp005" name="HaloSaturator.cpp" compile="1" resource="0"
+            file="source/DSP/HaloSaturator.cpp"/>
+      <FILE id="dsp006" name="HaloSaturator.h" compile="0" resource="0" file="source/DSP/HaloSaturator.h"/>
+    </GROUP>
+    <GROUP id="{UI001}" name="UI">
+      <FILE id="ui001" name="LookAndFeel.cpp" compile="1" resource="0" file="source/UI/LookAndFeel.cpp"/>
+      <FILE id="ui002" name="LookAndFeel.h" compile="0" resource="0" file="source/UI/LookAndFeel.h"/>
+      <GROUP id="{COMP001}" name="Components">
+        <FILE id="comp003" name="HaloKnob.cpp" compile="1" resource="0" file="source/UI/Components/HaloKnob.cpp"/>
+        <FILE id="comp004" name="HaloKnob.h" compile="0" resource="0" file="source/UI/Components/HaloKnob.h"/>
+        <FILE id="comp005" name="AudioFilePlayer.cpp" compile="1" resource="0"
+              file="source/UI/Components/AudioFilePlayer.cpp"/>
+        <FILE id="comp006" name="AudioFilePlayer.h" compile="0" resource="0"
+              file="source/UI/Components/AudioFilePlayer.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{SRC001}" name="Source">
+      <FILE id="src001" name="Parameters.cpp" compile="1" resource="0" file="source/Parameters.cpp"/>
+      <FILE id="src002" name="Parameters.h" compile="0" resource="0" file="source/Parameters.h"/>
+      <FILE id="src003" name="AuricHaloProcessor.cpp" compile="1" resource="0"
+            file="source/AuricHaloProcessor.cpp"/>
+      <FILE id="src004" name="AuricHaloProcessor.h" compile="0" resource="0"
+            file="source/AuricHaloProcessor.h"/>
+      <FILE id="src005" name="AuricHaloEditor.cpp" compile="1" resource="0"
+            file="source/AuricHaloEditor.cpp"/>
+      <FILE id="src006" name="AuricHaloEditor.h" compile="0" resource="0"
+            file="source/AuricHaloEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
+               JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0"/>
+  <EXPORTFORMATS>
+    <VS2022 targetFolder="Builds/VisualStudio2022">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="AuricHalo"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="AuricHalo"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2022>
+    <XCODE_MAC targetFolder="Builds/MacOSX" xcodeValidArchs="x86_64,arm64">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="AuricHalo" osxSDK="default"
+                       osxCompatibility="10.13 SDK" osxArchitecture="x86_64,arm64" macOSDeploymentTarget="10.13"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="AuricHalo" osxSDK="default"
+                       osxCompatibility="10.13 SDK" osxArchitecture="x86_64,arm64" stripLocalSymbols="1"
+                       linkTimeOptimisation="1" macOSDeploymentTarget="10.13"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+</JUCERPROJECT>

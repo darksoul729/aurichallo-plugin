@@ -1,0 +1,7 @@
+# Windows installer configuration
+set(CPACK_GENERATOR "NSIS")
+set(CPACK_PACKAGE_FILE_NAME "AuricHalo-${PROJECT_VERSION}-Windows")
+
+set(CPACK_NSIS_DISPLAY_NAME "Auric Halo")
+set(CPACK_NSIS_PACKAGE_NAME "Auric Halo")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)

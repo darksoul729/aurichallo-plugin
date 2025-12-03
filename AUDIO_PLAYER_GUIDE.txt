@@ -1,0 +1,222 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║     🎵 AURIC HALO - AUDIO PLAYER TESTING GUIDE 🎵        ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+FITUR BARU: BUILT-IN AUDIO FILE PLAYER!
+
+Sekarang Anda bisa test plugin dengan file audio langsung!
+
+═══════════════════════════════════════════════════════════
+
+✨ FITUR AUDIO PLAYER:
+
+✅ Drag & Drop file audio
+✅ Support format: WAV, MP3, AIFF, FLAC
+✅ Play/Pause button
+✅ Stop button
+✅ Progress bar visual
+✅ Real-time processing dengan plugin
+✅ Auto-stop di akhir file
+
+═══════════════════════════════════════════════════════════
+
+🎯 CARA MENGGUNAKAN:
+
+1. BUILD PROJECT
+   - Save di Projucer (Ctrl+Shift+S)
+   - Build di Visual Studio (Ctrl+Shift+B)
+   - Jalankan Standalone
+
+2. LOAD AUDIO FILE
+   Cara 1: Drag & Drop
+   - Drag file audio (WAV/MP3) dari Windows Explorer
+   - Drop ke area "Drag & Drop Audio File Here"
+   
+   Cara 2: (Future: Add browse button)
+
+3. PLAY AUDIO
+   - Klik tombol "Play"
+   - Audio akan diproses melalui plugin
+   - Lihat progress bar bergerak
+   - Dengar hasil processing
+
+4. TEST PARAMETERS
+   - Putar knob TONE → Dengar perubahan EQ
+   - Putar knob DRIVE → Dengar saturation
+   - Putar knob MIX → Blend dry/wet
+   - Putar knob OUTPUT → Adjust volume
+   - Toggle HALO ENGINE → Lihat visual effect
+
+5. CONTROL PLAYBACK
+   - Play: Mulai/resume playback
+   - Pause: Pause playback
+   - Stop: Stop dan reset ke awal
+
+═══════════════════════════════════════════════════════════
+
+📋 TESTING CHECKLIST:
+
+BASIC FUNCTIONALITY:
+[ ] Drag & drop file WAV → File loaded
+[ ] Klik Play → Audio playing
+[ ] Klik Pause → Audio paused
+[ ] Klik Play lagi → Resume dari posisi pause
+[ ] Klik Stop → Audio stop, reset ke awal
+[ ] Progress bar bergerak saat playing
+
+AUDIO PROCESSING:
+[ ] Audio pass through tanpa distorsi
+[ ] Putar TONE → Dengar perubahan
+[ ] Putar DRIVE → Dengar saturation
+[ ] Putar MIX → Dengar blend
+[ ] Putar OUTPUT → Volume berubah
+
+FILE FORMATS:
+[ ] Test dengan file .wav
+[ ] Test dengan file .mp3
+[ ] Test dengan file .aiff
+[ ] Test dengan file .flac
+
+EDGE CASES:
+[ ] Drop file non-audio → Tidak crash
+[ ] Play tanpa file → Tidak crash
+[ ] Load file baru saat playing → Switch smooth
+[ ] Playback sampai akhir → Auto stop
+
+═══════════════════════════════════════════════════════════
+
+🎨 UI LAYOUT BARU:
+
+┌─────────────────────────────────────────┐
+│         AURIC HALO (Title)              │
+│                                         │
+│   [TONE]    [DRIVE]      [MIX]         │
+│    knob    (main knob)    knob         │
+│                                         │
+│  HALO                   [OUTPUT]       │
+│  ENGINE                   knob         │
+│  [ON/OFF]                              │
+│                                         │
+│ ┌─────────────────────────────────┐   │
+│ │  AUDIO FILE PLAYER              │   │
+│ │  Drag & Drop Audio File Here    │   │
+│ │  [Play] [Stop]                  │   │
+│ │  ▓▓▓▓▓▓░░░░░░░░ (progress)      │   │
+│ └─────────────────────────────────┘   │
+└─────────────────────────────────────────┘
+
+Window size: 700x600 (increased for player)
+
+═══════════════════════════════════════════════════════════
+
+💡 TIPS TESTING:
+
+UNTUK HASIL TERBAIK:
+1. Gunakan file audio berkualitas baik (44.1kHz/48kHz)
+2. Test dengan berbagai jenis audio:
+   - Vocal
+   - Drum
+   - Bass
+   - Full mix
+3. Dengar dengan headphone untuk detail
+4. Compare dengan bypass (Mix = 0%)
+
+TROUBLESHOOTING:
+- Audio tidak keluar?
+  → Check audio device settings
+  → Check volume knobs
+  → Check Mix parameter
+
+- File tidak load?
+  → Check format (WAV/MP3/AIFF/FLAC)
+  → Check file tidak corrupt
+  → Try file lain
+
+- Distorsi/clipping?
+  → Kurangi Drive
+  → Kurangi Output
+  → Check input level
+
+═══════════════════════════════════════════════════════════
+
+🔧 TECHNICAL DETAILS:
+
+AUDIO PROCESSING FLOW:
+1. File audio loaded → AudioFormatReader
+2. Play button → AudioTransportSource
+3. Audio buffer → Plugin DSP chain
+4. DSP: EQ → Compressor → Saturator
+5. Output → Audio device
+
+SUPPORTED FORMATS:
+- WAV (PCM, 16/24/32-bit)
+- MP3 (all bitrates)
+- AIFF (Apple format)
+- FLAC (lossless)
+
+BUFFER SIZE:
+- Adjustable via audio settings
+- Default: 512 samples
+- Lower = less latency, more CPU
+- Higher = more latency, less CPU
+
+═══════════════════════════════════════════════════════════
+
+📁 FILES YANG DITAMBAHKAN:
+
+source/UI/Components/AudioFilePlayer.h
+source/UI/Components/AudioFilePlayer.cpp
+- Audio player component dengan drag & drop
+
+source/AuricHaloEditor.* (updated)
+- Integrated audio player ke UI
+
+source/AuricHaloProcessor.* (updated)
+- Audio routing dari player ke DSP
+
+AuricHalo.jucer (updated)
+- Added AudioFilePlayer to project
+
+═══════════════════════════════════════════════════════════
+
+🎯 NEXT STEPS:
+
+SETELAH BUILD:
+1. ✅ Build project (Projucer + Visual Studio)
+2. 🎵 Jalankan standalone
+3. 📂 Drag & drop file audio
+4. ▶️  Klik Play
+5. 🎛️  Test semua knobs
+6. 👂 Dengar hasil processing
+7. ✨ Toggle Halo Engine untuk visual
+
+OPTIONAL ENHANCEMENTS:
+□ Add browse file button
+□ Add waveform display
+□ Add loop mode
+□ Add volume meter
+□ Add file info display
+□ Add playlist support
+
+═══════════════════════════════════════════════════════════
+
+🎉 SELAMAT!
+
+Sekarang Anda punya audio player built-in untuk test plugin!
+
+Tidak perlu DAW lagi untuk test basic functionality!
+
+═══════════════════════════════════════════════════════════
+
+CARA BUILD:
+1. Buka Projucer
+2. Open: AuricHalo.jucer
+3. Save Project (Ctrl+Shift+S)
+4. Build di Visual Studio
+5. Test dengan file audio Anda!
+
+ENJOY TESTING! 🎵🎛️✨
+
+═══════════════════════════════════════════════════════════

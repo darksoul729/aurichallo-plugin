@@ -1,0 +1,114 @@
+=====================================
+AURIC HALO - BUILD NOTES
+=====================================
+
+PERUBAHAN TERBARU:
+✅ UI baru dengan desain premium dark theme
+✅ Halo glow effect di knob Drive
+✅ 4 parameter: Tone, Drive, Mix, Output
+✅ Toggle button Halo Engine (ON/OFF)
+✅ Custom knob dengan gradient purple-orange
+✅ Gold/brass color scheme
+
+=====================================
+CARA BUILD SETELAH UPDATE:
+=====================================
+
+1. BUKA PROJUCER
+   - Double-click: open_in_projucer.bat
+   - Atau buka Projucer.exe manual
+
+2. RELOAD PROJECT
+   - File → Open → AuricHalo.jucer
+   - Projucer akan detect perubahan file
+
+3. SAVE & GENERATE
+   - Klik "Save Project and Open in IDE"
+   - Atau tekan: Ctrl + Shift + S
+
+4. BUILD DI VISUAL STUDIO
+   - Clean Solution (Build → Clean Solution)
+   - Rebuild Solution (Build → Rebuild Solution)
+   - Atau tekan: Ctrl + Shift + B
+
+=====================================
+FILE YANG DIUPDATE:
+=====================================
+
+✅ AuricHaloEditor.h/cpp     - UI layout baru
+✅ HaloKnob.h/cpp            - Knob component
+✅ LookAndFeel.h/cpp         - Custom rendering
+✅ Parameters.cpp            - 4 parameters baru
+✅ AuricHalo.jucer           - Project config
+❌ HaloMeter (DIHAPUS)       - Tidak dipakai
+
+=====================================
+FITUR UI BARU:
+=====================================
+
+KNOBS:
+- TONE (kiri atas)      : EQ control
+- DRIVE (tengah besar)  : Main saturation
+- MIX (kanan atas)      : Dry/wet blend
+- OUTPUT (kanan bawah)  : Output level
+
+HALO ENGINE:
+- Toggle button (kiri bawah)
+- ON: Aktifkan halo glow effect
+- OFF: Matikan glow effect
+
+VISUAL:
+- Dark background (#0a0a0a)
+- Gold text & borders (#d4af37)
+- Purple glow (#b494ff)
+- Orange outer glow (#ffa366)
+
+=====================================
+TESTING:
+=====================================
+
+1. Build sukses → Test standalone:
+   Builds\VisualStudio2022\x64\Debug\Standalone Plugin\AuricHalo.exe
+
+2. Test di DAW:
+   - Copy .vst3 ke: C:\Program Files\Common Files\VST3\
+   - Scan plugin di DAW
+   - Load "Auric Halo"
+
+3. Test fitur:
+   ✓ Putar semua knob (Tone, Drive, Mix, Output)
+   ✓ Toggle Halo Engine ON/OFF
+   ✓ Lihat glow effect di knob Drive
+   ✓ Test audio processing
+
+=====================================
+TROUBLESHOOTING:
+=====================================
+
+ERROR: "Cannot find HaloMeter.h"
+SOLUSI: File sudah dihapus, re-save di Projucer
+
+ERROR: Build failed after update
+SOLUSI: 
+1. Close Visual Studio
+2. Delete folder: Builds\VisualStudio2022\
+3. Re-generate di Projucer
+4. Build ulang
+
+ERROR: Knob tidak muncul
+SOLUSI: Check attachment di AuricHaloEditor.cpp
+
+ERROR: Glow effect tidak muncul
+SOLUSI: Toggle Halo Engine button ke ON
+
+=====================================
+NEXT STEPS:
+=====================================
+
+1. ✅ Build & test UI
+2. 📝 Implement DSP algorithms
+3. 🎨 Add custom graphics/images
+4. 🎵 Fine-tune parameters
+5. 📦 Create installer
+
+=====================================

@@ -1,0 +1,190 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║         🔧 AURIC HALO - CRASH FIX APPLIED 🔧             ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+MASALAH: Plugin crash setelah play music
+
+PENYEBAB:
+- Buffer handling tidak aman
+- Threading issues antara UI dan audio thread
+- Pointer cleanup tidak proper
+
+═══════════════════════════════════════════════════════════
+
+✅ FIXES YANG SUDAH DITERAPKAN:
+
+1. BUFFER SAFETY
+   ✅ Added try-catch di processBlock
+   ✅ Clear buffer jika error
+   ✅ Temporary buffer untuk audio player
+   ✅ Safe channel copying
+
+2. POINTER MANAGEMENT
+   ✅ Proper cleanup di destructor
+   ✅ Set audioPlayer to nullptr saat editor close
+   ✅ Check nullptr sebelum akses
+   ✅ Reset readerSource dengan aman
+
+3. TRANSPORT SOURCE
+   ✅ Stop sebelum load file baru
+   ✅ Release old source sebelum set new
+   ✅ Proper order: stop → release → load
+   ✅ Check playing state sebelum process
+
+4. THREAD SAFETY
+   ✅ Playing flag check di getNextAudioBlock
+   ✅ Safe state transitions
+   ✅ Proper prepareToPlay validation
+
+═══════════════════════════════════════════════════════════
+
+🔧 TECHNICAL CHANGES:
+
+FILE: AudioFilePlayer.cpp
+- Added temporary buffer in getNextAudioBlock
+- Proper cleanup order in loadFile
+- Safe state checks in playPause
+- Validation in prepareToPlay
+
+FILE: AuricHaloProcessor.cpp
+- Try-catch wrapper di processBlock
+- Clear unused channels
+- Safe audioPlayer access
+- Error handling
+
+FILE: AuricHaloEditor.cpp
+- Set audioPlayer to nullptr in destructor
+- Proper cleanup order
+
+═══════════════════════════════════════════════════════════
+
+📋 TESTING SETELAH FIX:
+
+BASIC TESTS:
+[ ] Load file → No crash
+[ ] Play → No crash
+[ ] Pause → No crash
+[ ] Stop → No crash
+[ ] Play sampai akhir → No crash
+[ ] Load file baru saat playing → No crash
+[ ] Close plugin saat playing → No crash
+
+STRESS TESTS:
+[ ] Play/pause berulang kali → Stable
+[ ] Load berbagai file format → Stable
+[ ] Putar knobs saat playing → Stable
+[ ] Resize window saat playing → Stable
+
+═══════════════════════════════════════════════════════════
+
+🚀 CARA BUILD & TEST:
+
+1. SAVE PROJECT
+   - Buka Projucer
+   - Open: AuricHalo.jucer
+   - Save Project (Ctrl+Shift+S)
+
+2. CLEAN BUILD
+   - Di Visual Studio
+   - Build → Clean Solution
+   - Build → Rebuild Solution
+
+3. TEST CAREFULLY
+   - Jalankan standalone
+   - Drag & drop file audio
+   - Klik Play
+   - Monitor untuk crash
+   - Test semua controls
+
+4. JIKA MASIH CRASH
+   - Check Visual Studio Output window
+   - Lihat error message
+   - Report error details
+
+═══════════════════════════════════════════════════════════
+
+💡 TIPS DEBUGGING:
+
+JIKA MASIH ADA CRASH:
+
+1. Check Audio Settings
+   - Sample rate match (44.1kHz/48kHz)
+   - Buffer size reasonable (512-2048)
+   - Audio device working
+
+2. Check File Format
+   - Try simple WAV file first
+   - 16-bit, 44.1kHz, stereo
+   - Not corrupted
+
+3. Check Visual Studio
+   - Build in Debug mode
+   - Set breakpoint di processBlock
+   - Check call stack saat crash
+
+4. Common Issues
+   - Sample rate mismatch
+   - Buffer size too small
+   - File format not supported
+   - Audio device error
+
+═══════════════════════════════════════════════════════════
+
+🔍 ERROR HANDLING:
+
+SEKARANG PLUGIN AKAN:
+✅ Catch exceptions di audio processing
+✅ Clear buffer jika error
+✅ Continue running (tidak crash)
+✅ Safe cleanup saat close
+
+JIKA ADA ERROR:
+- Audio akan silent (buffer cleared)
+- Plugin tetap running
+- Bisa load file lain
+- Tidak force close
+
+═══════════════════════════════════════════════════════════
+
+📝 CHANGELOG:
+
+v1.1 - Crash Fix
+- Added buffer safety checks
+- Improved pointer management
+- Better thread safety
+- Exception handling
+- Proper cleanup order
+
+v1.0 - Initial Release
+- Basic audio player
+- Drag & drop support
+- Play/pause/stop controls
+
+═══════════════════════════════════════════════════════════
+
+⚠️  KNOWN LIMITATIONS:
+
+CURRENT VERSION:
+- Audio player hanya di standalone mode
+- Tidak support di VST3 (by design)
+- Mono files akan di-copy ke stereo
+- No resampling (file harus match sample rate)
+
+FUTURE IMPROVEMENTS:
+□ Add resampling untuk sample rate mismatch
+□ Add volume control untuk player
+□ Add waveform display
+□ Add loop mode
+□ Better error messages
+
+═══════════════════════════════════════════════════════════
+
+✅ SEHARUSNYA SEKARANG AMAN!
+
+Build ulang dan test dengan hati-hati.
+
+Jika masih crash, report error details!
+
+═══════════════════════════════════════════════════════════

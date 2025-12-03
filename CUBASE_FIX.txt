@@ -1,0 +1,125 @@
+========================================
+  FIX: AURIC HALO KEBACA SEBAGAI INSTRUMENT
+========================================
+
+MASALAH:
+--------
+Di Cubase, Auric Halo kebaca sebagai VST Instrument (synth)
+padahal harusnya VST Effect (plugin chain).
+
+PENYEBAB:
+---------
+Setting di file .jucer salah:
+- pluginIsSynth="0" ← Sudah benar
+- pluginCharacteristicsValue ← INI MASALAHNYA!
+  Value ini include "pluginIsSynth" yang bikin Cubase bingung
+
+SOLUSI:
+-------
+File sudah diperbaiki:
+1. AuricHalo.jucer
+   - Hapus pluginCharacteristicsValue yang salah
+   - Tambah pluginVST3Category="Fx"
+   - AAX Category = 2 (Effect, bukan 8)
+
+2. CMakeLists.txt
+   - VST3_CATEGORIES = "Fx" "Distortion" "Dynamics"
+   - AAX_CATEGORY = "AAX_ePlugInCategory_Harmonic"
+
+CARA REBUILD:
+-------------
+1. Buka AuricHalo.jucer di Projucer
+2. Save Project (Ctrl+Shift+S)
+3. Buka Visual Studio
+4. Rebuild Solution (Release x64)
+5. Build installer baru
+
+ATAU jalankan:
+scripts\build_all_and_installer.bat
+
+UNTUK CLIENT:
+-------------
+Setelah install versi baru:
+1. Uninstall versi lama dulu
+2. Install versi baru
+3. Buka Cubase
+4. Plugin Manager → Rescan
+5. Sekarang Auric Halo akan muncul di:
+   ✓ Insert → Audio FX → Auric Audio → Auric Halo
+   ✗ BUKAN di Instrument Rack
+
+VERIFIKASI DI CUBASE:
+---------------------
+Cara cek plugin sudah benar:
+1. Buka Cubase
+2. Buat Audio Track
+3. Klik Insert slot
+4. Cari "Auric Halo"
+5. Harusnya ada di kategori:
+   - Audio FX
+   - Distortion
+   - Dynamics
+   BUKAN di Instrument!
+
+KATEGORI VST3:
+--------------
+Plugin ini sekarang dikategorikan sebagai:
+- Fx (Effect) ← Main category
+- Distortion ← Sub-category
+- Dynamics ← Sub-category
+
+Ini akan muncul di:
+✓ Cubase: Audio FX → Distortion
+✓ FL Studio: Effects → Distortion
+✓ Ableton: Audio Effects
+✓ Pro Tools: Audio Suite → Harmonic
+
+KATEGORI AAX (PRO TOOLS):
+-------------------------
+AAX Category = 2 (Effect)
+AAX Sub-category = Harmonic
+
+Muncul di:
+✓ Pro Tools: AudioSuite → Harmonic → Auric Halo
+✓ Pro Tools: Insert → Harmonic → Auric Halo
+
+TECHNICAL DETAILS:
+------------------
+VST3 Categories yang tersedia:
+- Fx (Effect - WAJIB untuk audio effect)
+- Instrument (Synth - JANGAN pakai ini!)
+- Analyzer
+- Delay
+- Distortion ← Kita pakai ini
+- Dynamics ← Kita pakai ini
+- EQ
+- Filter
+- Mastering
+- Modulation
+- Pitch Shift
+- Restoration
+- Reverb
+- Spatial
+- Surround
+
+AAX Categories:
+- 0 = None
+- 1 = EQ
+- 2 = Dynamics ← Kita pakai ini
+- 4 = Pitch Shift
+- 8 = Reverb
+- 16 = Delay
+- 32 = Modulation
+- 64 = Harmonic ← Atau ini (lebih cocok)
+- 128 = Noise Reduction
+
+KESIMPULAN:
+-----------
+✓ File sudah diperbaiki
+✓ Plugin sekarang correct category
+✓ Rebuild dan kirim installer baru ke client
+✓ Client uninstall versi lama, install versi baru
+✓ Rescan di Cubase
+✓ Selesai!
+
+========================================

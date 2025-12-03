@@ -1,0 +1,174 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║      🚀 AURIC HALO - RELEASE QUICK START 🚀              ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+CARA TERCEPAT BUILD RELEASE & INSTALLER
+
+═══════════════════════════════════════════════════════════
+
+🎯 OPTION 1: MANUAL (Visual Studio)
+
+1. BUKA VISUAL STUDIO
+   - Open: AuricHalo.sln
+
+2. UBAH KE RELEASE
+   - Toolbar: Debug → Release
+   - Platform: x64
+
+3. BUILD
+   - Build → Rebuild Solution (Ctrl+Shift+B)
+   - Tunggu selesai
+
+4. HASIL
+   VST3: Builds\VisualStudio2022\x64\Release\VST3\
+   Standalone: Builds\VisualStudio2022\x64\Release\Standalone Plugin\
+
+═══════════════════════════════════════════════════════════
+
+🎯 OPTION 2: OTOMATIS (Batch Script)
+
+1. BUKA COMMAND PROMPT
+   - cd AuricHalo\scripts
+
+2. JALANKAN SCRIPT
+   build_and_package_windows.bat
+
+3. TUNGGU SELESAI
+   - Build Release
+   - Create Installer
+   - Package everything
+
+4. HASIL
+   Release\AuricHalo-1.0.0-Setup.exe
+
+═══════════════════════════════════════════════════════════
+
+📦 CARA BUAT INSTALLER:
+
+PREREQUISITES:
+1. Download Inno Setup:
+   https://jrsoftware.org/isdl.php
+
+2. Install Inno Setup
+
+3. Build Release version dulu
+
+BUAT INSTALLER:
+Method 1: Script
+   cd AuricHalo\scripts
+   build_installer_windows.bat
+
+Method 2: Manual
+   - Buka Inno Setup Compiler
+   - File → Open: installers\windows\AuricHalo_Setup.iss
+   - Build → Compile (Ctrl+F9)
+
+HASIL:
+   Release\AuricHalo-1.0.0-Setup.exe
+
+═══════════════════════════════════════════════════════════
+
+✅ TESTING CHECKLIST:
+
+SEBELUM DISTRIBUSI:
+[ ] Build Release sukses
+[ ] File size reasonable (<20MB)
+[ ] Test VST3 di DAW
+[ ] Test Standalone
+[ ] Test installer
+[ ] Install di clean system
+[ ] Uninstall works properly
+[ ] No crashes
+[ ] No errors
+
+═══════════════════════════════════════════════════════════
+
+📁 FILE STRUCTURE RELEASE:
+
+Release/
+├── AuricHalo-1.0.0-Setup.exe    ← Installer (distribute this)
+├── Portable/                     ← Portable version (optional)
+│   └── AuricHalo.exe
+├── README.txt
+├── LICENSE.txt
+└── CHANGELOG.txt
+
+═══════════════════════════════════════════════════════════
+
+🚀 DISTRIBUSI:
+
+1. UPLOAD
+   - Upload installer ke website
+   - Or use file hosting (Google Drive, Dropbox)
+
+2. ANNOUNCE
+   - Social media
+   - Email list
+   - Forums (KVR, Gearspace)
+
+3. SUPPORT
+   - Provide email support
+   - Create FAQ
+   - Monitor feedback
+
+═══════════════════════════════════════════════════════════
+
+💡 TIPS:
+
+TESTING:
+- Test di Windows 10 & 11
+- Test di berbagai DAW
+- Test dengan berbagai audio interfaces
+
+OPTIMIZATION:
+- Release build jauh lebih kecil dari Debug
+- Typical size: 10-20MB
+- Fast loading & low CPU
+
+DISTRIBUTION:
+- Code signing recommended (tapi optional)
+- Antivirus scan before release
+- Provide checksums (MD5/SHA256)
+
+═══════════════════════════════════════════════════════════
+
+📞 TROUBLESHOOTING:
+
+"Build failed"
+→ Check Visual Studio installed
+→ Check all source files present
+→ Clean & rebuild
+
+"Installer creation failed"
+→ Install Inno Setup
+→ Check Release build exists
+→ Check paths in .iss file
+
+"Plugin won't load"
+→ Check 64-bit version
+→ Check dependencies
+→ Test on clean system
+
+═══════════════════════════════════════════════════════════
+
+✅ QUICK COMMAND SUMMARY:
+
+# Build Release
+cd AuricHalo\scripts
+build_release_windows.bat
+
+# Create Installer
+build_installer_windows.bat
+
+# Do Everything
+build_and_package_windows.bat
+
+═══════════════════════════════════════════════════════════
+
+SELAMAT! SIAP UNTUK RELEASE! 🎉
+
+Ikuti langkah-langkah di atas untuk distribusi!
+
+═══════════════════════════════════════════════════════════

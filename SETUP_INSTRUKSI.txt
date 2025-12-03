@@ -1,0 +1,77 @@
+=====================================
+AURIC HALO - SETUP INSTRUKSI
+=====================================
+
+LANGKAH-LANGKAH BUILD:
+
+1. PASTIKAN JUCE SUDAH TERINSTALL
+   - Path JUCE modules harus ada di: ../../JUCE/modules
+   - Atau sesuaikan path di file AuricHalo.jucer
+
+2. BUKA PROJUCER
+   - Jalankan Projucer.exe dari instalasi JUCE Anda
+   - Biasanya ada di: C:\JUCE\Projucer.exe
+
+3. OPEN PROJECT
+   - Di Projucer: File → Open
+   - Pilih file: AuricHalo.jucer
+
+4. CEK KONFIGURASI
+   - Klik tab "Exporters" → "Visual Studio 2022"
+   - Pastikan "Module Paths" sudah benar
+   - Jika JUCE ada di lokasi lain, update path-nya
+
+5. GENERATE PROJECT
+   - Klik tombol "Save Project and Open in IDE" (ikon Visual Studio)
+   - Atau tekan: Ctrl + Shift + S
+   - Projucer akan generate Visual Studio solution
+
+6. BUILD DI VISUAL STUDIO
+   - Visual Studio akan terbuka otomatis
+   - Pilih configuration: Debug atau Release
+   - Pilih platform: x64
+   - Menu: Build → Build Solution (atau tekan F7)
+
+7. HASIL BUILD
+   Plugin akan ada di:
+   - VST3: Builds\VisualStudio2022\x64\Debug\VST3\AuricHalo.vst3
+   - Standalone: Builds\VisualStudio2022\x64\Debug\Standalone Plugin\AuricHalo.exe
+
+=====================================
+TROUBLESHOOTING:
+=====================================
+
+MASALAH: "Cannot find JuceHeader.h"
+SOLUSI: 
+- Buka Projucer → File → Global Paths
+- Set "Path to JUCE" ke folder JUCE Anda
+- Re-save project
+
+MASALAH: "Module not found"
+SOLUSI:
+- Di Projucer, klik tab "Modules"
+- Klik setiap module, pastikan path benar
+- Atau klik "Set all modules to use global path"
+
+MASALAH: Build error di Visual Studio
+SOLUSI:
+- Clean solution: Build → Clean Solution
+- Rebuild: Build → Rebuild Solution
+- Pastikan Windows SDK terinstall
+
+=====================================
+STRUKTUR FILE:
+=====================================
+
+AuricHalo/
+├── AuricHalo.jucer          ← BUKA FILE INI DI PROJUCER
+├── source/
+│   ├── AuricHaloProcessor.* ← Audio processing
+│   ├── AuricHaloEditor.*    ← GUI
+│   ├── Parameters.*         ← Parameter management
+│   ├── DSP/                 ← DSP algorithms
+│   └── UI/                  ← UI components
+└── Builds/
+    └── VisualStudio2022/    ← Generated setelah save di Projucer
+
+=====================================

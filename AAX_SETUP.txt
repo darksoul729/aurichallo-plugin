@@ -1,0 +1,207 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║      🎚️ AURIC HALO - AAX (PRO TOOLS) SETUP 🎚️           ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+AAX SUDAH DIAKTIFKAN DI PROJECT!
+
+═══════════════════════════════════════════════════════════
+
+✅ YANG SUDAH DIKONFIGURASI:
+
+Plugin Formats:
+✅ AAX (Pro Tools)
+✅ VST3
+✅ Standalone
+
+AAX Settings:
+✅ AAX Identifier: com.auricaudio.aurichalo
+✅ AAX Category: 8 (Harmonic/Effect)
+✅ Manufacturer Code: Aurc
+✅ Plugin Code: AuHa
+✅ Bypass: Enabled
+✅ Multi-Mono: Enabled
+
+═══════════════════════════════════════════════════════════
+
+⚠️  YANG PERLU ANDA LAKUKAN:
+
+1. DOWNLOAD AAX SDK
+   - Daftar di: https://www.avid.com/alliance-partner-program
+   - Download AAX SDK (gratis untuk development)
+   - Extract ke: C:\SDKs\AAX_SDK\
+
+2. SET ENVIRONMENT VARIABLE
+   Windows:
+   - Klik kanan "This PC" → Properties
+   - Advanced System Settings
+   - Environment Variables
+   - New System Variable:
+     Name: AAX_SDK_PATH
+     Value: C:\SDKs\AAX_SDK
+   - Restart computer
+
+3. BUKA PROJUCER
+   - Open: AuricHalo.jucer
+   - File → Global Paths
+   - Set "Path to AAX SDK": C:\SDKs\AAX_SDK
+   - Save
+
+4. GENERATE PROJECT
+   - Save Project (Ctrl+Shift+S)
+   - Projucer akan generate AAX project
+
+5. BUILD DI VISUAL STUDIO
+   - Open solution
+   - Select "AuricHalo_AAX" project
+   - Build → Build Solution
+   - Output: Builds\VisualStudio2022\x64\Release\AAX\
+
+6. INSTALL PLUGIN
+   - Copy .aaxplugin ke:
+     C:\Program Files\Common Files\Avid\Audio\Plug-Ins\
+   - Launch Pro Tools
+   - Scan plugins
+
+═══════════════════════════════════════════════════════════
+
+📋 AAX CATEGORIES:
+
+Category 8 = Harmonic/Effect (SUDAH DIPILIH)
+
+Kategori lain:
+0 = None
+1 = EQ
+2 = Dynamics
+3 = PitchShift
+4 = Reverb
+5 = Delay
+6 = Modulation
+7 = Harmonic
+8 = NoiseReduction
+9 = Dither
+10 = SoundField
+
+═══════════════════════════════════════════════════════════
+
+💰 BIAYA:
+
+DEVELOPMENT (GRATIS):
+✅ AAX SDK: Free
+✅ Build & test: Free
+✅ Development mode: Free
+
+DISTRIBUTION (BERBAYAR):
+💰 Avid Developer Program: $299/year
+💰 Code signing included
+💰 iLok account required
+
+REKOMENDASI:
+- Test dulu dengan VST3 (gratis)
+- Kalau sudah bagus, baru bayar AAX
+- AAX hanya perlu kalau mau jual ke Pro Tools users
+
+═══════════════════════════════════════════════════════════
+
+🔧 TROUBLESHOOTING:
+
+ERROR: "AAX SDK not found"
+SOLUSI:
+1. Download AAX SDK
+2. Set AAX_SDK_PATH environment variable
+3. Restart Visual Studio
+4. Re-save Projucer project
+
+ERROR: "Cannot build AAX"
+SOLUSI:
+1. Check AAX SDK path di Projucer Global Paths
+2. Check environment variable
+3. Restart computer
+4. Clean & rebuild
+
+ERROR: "Plugin won't load in Pro Tools"
+SOLUSI:
+1. Check plugin di folder yang benar
+2. Rescan plugins di Pro Tools
+3. Check Pro Tools version (2020+)
+4. For release: Plugin harus di-sign
+
+═══════════════════════════════════════════════════════════
+
+📁 FILE LOCATIONS:
+
+AAX SDK:
+C:\SDKs\AAX_SDK\
+
+Built Plugin:
+Builds\VisualStudio2022\x64\Release\AAX\AuricHalo.aaxplugin
+
+Installation:
+C:\Program Files\Common Files\Avid\Audio\Plug-Ins\AuricHalo.aaxplugin
+
+═══════════════════════════════════════════════════════════
+
+🎯 QUICK START (TANPA AAX SDK):
+
+Kalau belum punya AAX SDK, build VST3 dulu:
+
+1. Buka Projucer
+2. Disable AAX temporarily:
+   - Plugin Formats: Uncheck "AAX"
+   - Check "VST3" dan "Standalone"
+3. Save Project
+4. Build di Visual Studio
+5. Test dengan VST3 dulu
+
+Nanti kalau sudah siap, enable AAX lagi.
+
+═══════════════════════════════════════════════════════════
+
+✅ CURRENT STATUS:
+
+Project Configuration: ✅ READY
+AAX Settings: ✅ CONFIGURED
+Code: ✅ AAX-COMPATIBLE
+
+Need:
+⏳ AAX SDK (download dari Avid)
+⏳ Environment variable setup
+⏳ Pro Tools untuk testing
+
+═══════════════════════════════════════════════════════════
+
+📞 SUPPORT:
+
+Avid Developer Portal:
+https://www.avid.com/alliance-partner-program
+
+JUCE Forum (AAX):
+https://forum.juce.com/
+
+iLok:
+https://www.ilok.com/
+
+═══════════════════════════════════════════════════════════
+
+NEXT STEPS:
+
+OPTION 1: Build AAX Now
+1. Download AAX SDK
+2. Setup environment
+3. Build AAX version
+4. Test in Pro Tools
+
+OPTION 2: Build VST3 First (RECOMMENDED)
+1. Disable AAX temporarily
+2. Build VST3
+3. Test & polish
+4. Add AAX later when ready
+
+═══════════════════════════════════════════════════════════
+
+SELAMAT! PROJECT SUDAH SIAP UNTUK AAX! 🎉
+
+Tinggal download AAX SDK dan setup environment!
+
+═══════════════════════════════════════════════════════════

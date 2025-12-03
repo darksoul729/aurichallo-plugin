@@ -1,0 +1,39 @@
+AURIC HALO - END USER LICENSE AGREEMENT (EULA)
+
+Copyright (c) 2025 Auric Audio. All rights reserved.
+
+IMPORTANT - READ CAREFULLY:
+
+This End User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and Auric Audio for the Auric Halo software product, which includes computer software and may include associated media, printed materials, and "online" or electronic documentation ("SOFTWARE PRODUCT").
+
+By installing, copying, or otherwise using the SOFTWARE PRODUCT, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the SOFTWARE PRODUCT.
+
+1. GRANT OF LICENSE
+Auric Audio grants you the following rights:
+- Installation and Use: You may install and use the SOFTWARE PRODUCT on multiple computers.
+- Personal Use: This license is for personal use only.
+
+2. RESTRICTIONS
+You may NOT:
+- Reverse engineer, decompile, or disassemble the SOFTWARE PRODUCT
+- Rent, lease, or lend the SOFTWARE PRODUCT
+- Remove any copyright notices from the SOFTWARE PRODUCT
+- Distribute copies of the SOFTWARE PRODUCT to third parties
+
+3. COPYRIGHT
+All title and copyrights in and to the SOFTWARE PRODUCT are owned by Auric Audio.
+
+4. NO WARRANTIES
+The SOFTWARE PRODUCT is provided "AS IS" without warranty of any kind.
+
+5. LIMITATION OF LIABILITY
+In no event shall Auric Audio be liable for any damages whatsoever arising out of the use of or inability to use this SOFTWARE PRODUCT.
+
+6. TERMINATION
+This EULA is effective until terminated. Your rights will terminate automatically without notice if you fail to comply with any term of this EULA.
+
+For questions regarding this EULA, please contact:
+Auric Audio
+support@auricaudio.com
+
+Last updated: December 2025

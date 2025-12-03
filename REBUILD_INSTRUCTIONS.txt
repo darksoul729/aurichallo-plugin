@@ -1,0 +1,85 @@
+========================================
+  CARA REBUILD SETELAH FIX CUBASE
+========================================
+
+MASALAH SUDAH DIPERBAIKI:
+--------------------------
+✓ AuricHalo.jucer - Category sudah benar (Fx, bukan Instrument)
+✓ CMakeLists.txt - VST3 categories sudah benar
+✓ Installer - Message sudah update
+
+CARA REBUILD:
+-------------
+
+OPSI 1 - OTOMATIS (RECOMMENDED):
+1. Buka Command Prompt
+2. cd ke folder project
+3. Jalankan:
+   cd scripts
+   build_all_and_installer.bat
+4. Tunggu selesai
+5. Installer baru ada di: Release\AuricHalo-1.0.0-Win64-Setup.exe
+
+OPSI 2 - MANUAL:
+1. Buka AuricHalo.jucer di Projucer
+2. Cek setting:
+   - Plugin Formats: VST3, AAX, Standalone
+   - Plugin Characteristics:
+     * Is a Synth: NO ← PENTING!
+     * Wants MIDI Input: NO
+     * Produces MIDI Output: NO
+   - VST3 Category: Fx
+3. Save Project (Ctrl+Shift+S)
+4. Buka Visual Studio
+5. Configuration: Release
+6. Platform: x64
+7. Build → Rebuild Solution
+8. Jalankan: scripts\build_installer_windows.bat
+
+KIRIM KE CLIENT:
+----------------
+File: Release\AuricHalo-1.0.0-Win64-Setup.exe
+
+Beritahu client:
+"Halo, ada update plugin Auric Halo.
+
+PENTING: Uninstall versi lama dulu sebelum install yang baru!
+
+Cara install:
+1. Uninstall Auric Halo versi lama
+2. Install versi baru (double-click installer)
+3. Buka Cubase
+4. Plugin Manager → Rescan
+5. Sekarang Auric Halo ada di: Audio FX → Distortion
+
+Sebelumnya kebaca sebagai Instrument, sekarang sudah benar sebagai Audio Effect."
+
+VERIFIKASI DI CUBASE:
+---------------------
+Setelah install, cek di Cubase:
+1. Buat Audio Track
+2. Klik Insert slot
+3. Cari "Auric Halo"
+4. Harusnya ada di:
+   ✓ Audio FX
+   ✓ Distortion
+   ✗ BUKAN di Instrument!
+
+JIKA MASIH KEBACA SEBAGAI INSTRUMENT:
+--------------------------------------
+1. Uninstall plugin
+2. Hapus cache Cubase:
+   C:\Users\[Username]\AppData\Roaming\Steinberg\Cubase\
+   Hapus file: vst3_cache.xml
+3. Install plugin lagi
+4. Rescan di Cubase
+
+KATEGORI PLUGIN:
+----------------
+VST3: Fx → Distortion → Dynamics
+AAX: Harmonic (Pro Tools)
+AU: Effect (macOS)
+
+Ini adalah AUDIO EFFECT, bukan INSTRUMENT!
+
+========================================

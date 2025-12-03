@@ -1,0 +1,270 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║    🎚️ AURIC HALO - AAX INSTALLER GUIDE (PRO TOOLS) 🎚️   ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+CARA BUAT INSTALLER UNTUK PRO TOOLS (AAX)
+
+═══════════════════════════════════════════════════════════
+
+📋 PERBEDAAN FORMAT PLUGIN:
+
+VST3 (.vst3):
+- Universal format
+- Works di: Ableton, FL Studio, Cubase, Reaper, dll
+- Install ke: C:\Program Files\Common Files\VST3\
+
+AAX (.aaxplugin):
+- Pro Tools only
+- Works di: Pro Tools, Pro Tools First
+- Install ke: C:\Program Files\Common Files\Avid\Audio\Plug-Ins\
+
+STANDALONE (.exe):
+- Independent application
+- Tidak perlu DAW
+- Install ke: C:\Program Files\Auric Audio\
+
+═══════════════════════════════════════════════════════════
+
+🎯 INSTALLER OPTIONS:
+
+OPTION 1: ALL-IN-ONE INSTALLER (RECOMMENDED)
+File: AuricHalo_Setup.iss
+Includes:
+✅ VST3 (untuk semua DAW)
+✅ AAX (untuk Pro Tools)
+✅ Standalone (optional)
+✅ User pilih mau install apa
+
+OPTION 2: AAX-ONLY INSTALLER
+File: AuricHalo_AAX_Setup.iss
+Includes:
+✅ AAX only (Pro Tools)
+✅ Lebih kecil file size
+✅ Khusus Pro Tools users
+
+═══════════════════════════════════════════════════════════
+
+🔨 CARA BUILD AAX INSTALLER:
+
+PREREQUISITES:
+1. AAX SDK installed
+2. AAX version sudah di-build
+3. Inno Setup installed
+
+LANGKAH-LANGKAH:
+
+1. BUILD AAX VERSION
+   - Visual Studio → Release mode
+   - Build AuricHalo_AAX project
+   - Output: Builds\VisualStudio2022\x64\Release\AAX\
+
+2. VERIFY AAX BUILD
+   Check file exists:
+   Builds\VisualStudio2022\x64\Release\AAX\AuricHalo.aaxplugin\
+
+3. OPEN INNO SETUP
+   - Launch Inno Setup Compiler
+   
+4. COMPILE INSTALLER
+   
+   For All-in-One:
+   - Open: installers\windows\AuricHalo_Setup.iss
+   - Build → Compile
+   - Output: Release\AuricHalo-1.0.0-Setup.exe
+   
+   For AAX-Only:
+   - Open: installers\windows\AuricHalo_AAX_Setup.iss
+   - Build → Compile
+   - Output: Release\AuricHalo-1.0.0-AAX-Setup.exe
+
+═══════════════════════════════════════════════════════════
+
+📁 AAX PLUGIN STRUCTURE:
+
+AuricHalo.aaxplugin/
+├── Contents/
+│   ├── x64/
+│   │   └── AuricHalo.aaxplugin    ← Main plugin file
+│   ├── Resources/
+│   │   └── PlugIn.ico
+│   └── Info.plist
+
+INSTALL LOCATION:
+C:\Program Files\Common Files\Avid\Audio\Plug-Ins\AuricHalo.aaxplugin\
+
+═══════════════════════════════════════════════════════════
+
+🧪 TESTING AAX INSTALLER:
+
+1. BUILD INSTALLER
+   - Compile dengan Inno Setup
+
+2. TEST INSTALLATION
+   - Run installer
+   - Follow wizard
+   - Check "AAX Plugin" option selected
+
+3. VERIFY INSTALLATION
+   Check file exists:
+   C:\Program Files\Common Files\Avid\Audio\Plug-Ins\AuricHalo.aaxplugin\
+
+4. TEST IN PRO TOOLS
+   - Launch Pro Tools
+   - Setup → Plug-ins
+   - Click "Rescan"
+   - Find "Auric Halo" in plugin list
+   - Insert on track
+   - Test functionality
+
+5. TEST UNINSTALL
+   - Uninstall via Control Panel
+   - Verify files removed
+   - Check Pro Tools (plugin should be gone)
+
+═══════════════════════════════════════════════════════════
+
+⚠️  COMMON ISSUES:
+
+ISSUE: "AAX files not found"
+SOLUTION:
+- Build AAX version first
+- Check AAX SDK installed
+- Check path in .iss file
+
+ISSUE: "Plugin won't load in Pro Tools"
+SOLUTION:
+- Check plugin is signed (for release)
+- Check Pro Tools version (2020+)
+- Rescan plugins in Pro Tools
+- Check plugin in correct folder
+
+ISSUE: "Installer fails"
+SOLUTION:
+- Run as Administrator
+- Check disk space
+- Check antivirus not blocking
+
+ISSUE: "Pro Tools doesn't see plugin"
+SOLUTION:
+- Setup → Plug-ins → Rescan
+- Check plugin folder permissions
+- Restart Pro Tools
+- Check plugin is 64-bit
+
+═══════════════════════════════════════════════════════════
+
+🔐 CODE SIGNING (For Distribution):
+
+AAX REQUIRES CODE SIGNING:
+- Development: Can test unsigned
+- Distribution: MUST be signed
+
+SIGNING PROCESS:
+1. Get Avid Developer Account ($299/year)
+2. Get PACE/iLok account
+3. Get code signing certificate
+4. Sign with wraptool:
+   
+   wraptool sign --verbose ^
+     --account YOUR_ACCOUNT ^
+     --password YOUR_PASSWORD ^
+     --wcguid YOUR_GUID ^
+     --in AuricHalo.aaxplugin ^
+     --out AuricHalo_signed.aaxplugin
+
+5. Use signed version in installer
+
+═══════════════════════════════════════════════════════════
+
+📦 INSTALLER FEATURES:
+
+ALL-IN-ONE INSTALLER:
+✅ Detects Pro Tools installation
+✅ User can choose formats
+✅ VST3 + AAX + Standalone
+✅ One installer for all users
+✅ Automatic path detection
+✅ Uninstaller included
+
+AAX-ONLY INSTALLER:
+✅ Smaller file size
+✅ Pro Tools specific
+✅ Checks for Pro Tools
+✅ Warning if Pro Tools not found
+✅ Detailed installation instructions
+
+═══════════════════════════════════════════════════════════
+
+💡 DISTRIBUTION TIPS:
+
+FOR PRO TOOLS USERS:
+- Clearly label "AAX" in filename
+- Mention Pro Tools compatibility
+- List supported Pro Tools versions
+- Provide installation video
+
+FOR ALL USERS:
+- Use all-in-one installer
+- Let users choose formats
+- Provide format comparison
+- Support multiple DAWs
+
+FILE NAMING:
+- AuricHalo-1.0.0-Setup.exe (all formats)
+- AuricHalo-1.0.0-AAX-Setup.exe (Pro Tools only)
+- AuricHalo-1.0.0-VST3-Setup.exe (VST3 only)
+
+═══════════════════════════════════════════════════════════
+
+✅ QUICK CHECKLIST:
+
+PRE-BUILD:
+[ ] AAX SDK installed
+[ ] Environment variables set
+[ ] Project configured for AAX
+
+BUILD:
+[ ] Build Release configuration
+[ ] Build AAX target
+[ ] Verify .aaxplugin exists
+
+INSTALLER:
+[ ] Inno Setup installed
+[ ] Edit .iss file if needed
+[ ] Compile installer
+[ ] Test installer
+
+TESTING:
+[ ] Install on clean system
+[ ] Test in Pro Tools
+[ ] Test all features
+[ ] Test uninstall
+
+DISTRIBUTION:
+[ ] Sign AAX plugin (for release)
+[ ] Create installer
+[ ] Test on multiple systems
+[ ] Upload & distribute
+
+═══════════════════════════════════════════════════════════
+
+🎯 QUICK COMMANDS:
+
+# Build AAX (Visual Studio)
+msbuild AuricHalo.sln /t:AuricHalo_AAX /p:Configuration=Release /p:Platform=x64
+
+# Create All-in-One Installer
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installers\windows\AuricHalo_Setup.iss
+
+# Create AAX-Only Installer
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installers\windows\AuricHalo_AAX_Setup.iss
+
+═══════════════════════════════════════════════════════════
+
+SELAMAT! INSTALLER AAX SIAP! 🎚️
+
+Ikuti langkah-langkah di atas untuk distribusi Pro Tools!
+
+═══════════════════════════════════════════════════════════
