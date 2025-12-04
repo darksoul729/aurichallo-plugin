@@ -30,8 +30,6 @@ mkdir -p "$INSTALLER_DIR"
 
 # Create directory structure
 mkdir -p "$INSTALLER_DIR/VST3"
-mkdir -p "$INSTALLER_DIR/AU" 
-mkdir -p "$INSTALLER_DIR/AAX"
 mkdir -p "$INSTALLER_DIR/Applications"
 
 # Copy built plugins (if they exist)
@@ -40,16 +38,6 @@ BUILD_DIR="Builds/MacOSX/build/Release"
 if [ -d "$BUILD_DIR/AuricHalo.vst3" ]; then
     echo "📋 Copying VST3..."
     cp -R "$BUILD_DIR/AuricHalo.vst3" "$INSTALLER_DIR/VST3/"
-fi
-
-if [ -d "$BUILD_DIR/AuricHalo.component" ]; then
-    echo "📋 Copying AU..."
-    cp -R "$BUILD_DIR/AuricHalo.component" "$INSTALLER_DIR/AU/"
-fi
-
-if [ -d "$BUILD_DIR/AuricHalo.aaxplugin" ]; then
-    echo "📋 Copying AAX..."
-    cp -R "$BUILD_DIR/AuricHalo.aaxplugin" "$INSTALLER_DIR/AAX/"
 fi
 
 if [ -d "$BUILD_DIR/AuricHalo.app" ]; then
@@ -61,27 +49,13 @@ fi
 cat > "$INSTALLER_DIR/postinstall" << 'EOF'
 #!/bin/bash
 
-echo "Installing Auric Halo plugins..."
+echo "Installing Auric Halo VST3 plugin..."
 
 # Install VST3
 if [ -d "$1/VST3/AuricHalo.vst3" ]; then
     mkdir -p "$HOME/Library/Audio/Plug-Ins/VST3"
     cp -R "$1/VST3/AuricHalo.vst3" "$HOME/Library/Audio/Plug-Ins/VST3/"
     echo "✅ VST3 installed"
-fi
-
-# Install AU
-if [ -d "$1/AU/AuricHalo.component" ]; then
-    mkdir -p "$HOME/Library/Audio/Plug-Ins/Components"
-    cp -R "$1/AU/AuricHalo.component" "$HOME/Library/Audio/Plug-Ins/Components/"
-    echo "✅ AU installed"
-fi
-
-# Install AAX
-if [ -d "$1/AAX/AuricHalo.aaxplugin" ]; then
-    mkdir -p "$HOME/Library/Application Support/Avid/Audio/Plug-Ins"
-    cp -R "$1/AAX/AuricHalo.aaxplugin" "$HOME/Library/Application Support/Avid/Audio/Plug-Ins/"
-    echo "✅ AAX installed"
 fi
 
 # Install Standalone App
@@ -92,13 +66,20 @@ fi
 
 echo "🎉 Auric Halo installation complete!"
 echo ""
-echo "Plugin locations:"
+echo "Plugin location:"
 echo "VST3: ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3"
-echo "AU:   ~/Library/Audio/Plug-Ins/Components/AuricHalo.component" 
-echo "AAX:  ~/Library/Application Support/Avid/Audio/Plug-Ins/AuricHalo.aaxplugin"
 echo "App:  /Applications/AuricHalo.app"
 echo ""
 echo "Please rescan plugins in your DAW."
+echo ""
+echo "Compatible DAWs:"
+echo "- Ableton Live"
+echo "- FL Studio"
+echo "- Cubase"
+echo "- Studio One"
+echo "- Reaper"
+echo "- Bitwig"
+echo "- And many more VST3-compatible DAWs"
 
 exit 0
 EOF

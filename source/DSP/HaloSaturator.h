@@ -12,4 +12,9 @@ public:
 private:
     float drive = 1.0f;
     double sampleRate = 44100.0;
+    
+    // Multi-stage saturation for deeper drive
+    float softClip(float x);
+    float hardClip(float x);
+    float tubeDistortion(float x);
 };

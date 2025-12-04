@@ -1,0 +1,69 @@
+═══════════════════════════════════════════════════════════════
+  AURIC HALO - UPDATE: INPUT/OUTPUT METERS & OVERSAMPLING
+═══════════════════════════════════════════════════════════════
+
+✅ FITUR BARU BERHASIL DITAMBAHKAN:
+
+1. INPUT/OUTPUT LEVEL METERS
+   - Bar vertikal di kiri (Input) dan kanan (Output)
+   - 20 LED segments dengan color gradient
+   - Real-time monitoring dengan smooth decay
+   - Label "IN" dan "OUT"
+
+2. OVERSAMPLING
+   - Pilihan: Off / 2x / 4x
+   - Selector di bawah tengah UI
+   - Mengurangi aliasing pada saturation
+   - Default: 2x (recommended)
+
+═══════════════════════════════════════════════════════════════
+
+📁 FILE BARU:
+   - source/UI/LevelMeter.h
+   - source/UI/LevelMeter.cpp
+
+🔧 FILE DIMODIFIKASI:
+   - source/AuricHaloProcessor.h
+   - source/AuricHaloProcessor.cpp
+   - source/AuricHaloEditor.h
+   - source/AuricHaloEditor.cpp
+   - source/Parameters.cpp
+   - AuricHalo.jucer
+
+═══════════════════════════════════════════════════════════════
+
+✅ BUILD STATUS:
+   ✓ VST3 Debug - SUCCESS
+   ✓ VST3 Release - SUCCESS
+   ✓ AU Release - SUCCESS
+
+📍 LOKASI PLUGIN:
+   VST3: ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+   AU:   ~/Library/Audio/Plug-Ins/Components/AuricHalo.component
+
+═══════════════════════════════════════════════════════════════
+
+🎯 CARA PAKAI:
+
+LEVEL METERS:
+- Otomatis menampilkan input/output level
+- Hijau = aman, Kuning = tinggi, Merah = very high
+
+OVERSAMPLING:
+- Klik dropdown di bawah tengah
+- Pilih Off (CPU rendah) / 2x (balance) / 4x (best quality)
+- Recommended: 2x untuk daily use
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOKUMENTASI:
+   - FITUR_BARU_METER_OVERSAMPLING.md (detail lengkap)
+   - TEST_METER_OVERSAMPLING.md (testing guide)
+
+═══════════════════════════════════════════════════════════════
+
+🚀 SIAP DIGUNAKAN!
+   Plugin sudah ter-compile dan ter-install.
+   Buka DAW favorit Anda dan test fitur baru.
+
+═══════════════════════════════════════════════════════════════

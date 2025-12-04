@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# AU Post-Install Script
+
+echo "Installing Audio Unit plugin..."
+
+# Kill any running DAWs
+killall "Logic Pro" 2>/dev/null || true
+killall "Logic Pro X" 2>/dev/null || true
+killall "GarageBand" 2>/dev/null || true
+
+# Set permissions
+chmod -R 755 "/Library/Audio/Plug-Ins/Components/AuricHalo.component"
+
+# Clear AU cache to force rescan
+echo "Clearing Audio Unit cache..."
+killall -9 AudioComponentRegistrar 2>/dev/null || true
+rm -rf ~/Library/Caches/AudioUnitCache 2>/dev/null || true
+
+# Validate plugin
+echo "Validating Audio Unit..."
+auval -v aufx AuHa Aurc > /dev/null 2>&1 || true
+
+echo "Audio Unit installed successfully"
+
+exit 0

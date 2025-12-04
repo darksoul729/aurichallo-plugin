@@ -4,12 +4,12 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginFormats="buildAAX,buildAU,buildVST3,buildStandalone"
               version="1.0.0" companyName="Auric Audio" pluginManufacturerCode="Aurc"
               pluginCode="AuHa" pluginChannelConfigs="{1,1},{2,2}" pluginIsSynth="0"
-              pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0"
-              pluginVST3Category="Fx"
-              pluginEditorRequiresKeys="0" pluginAUExportPrefix="AuricHaloAU"
-              pluginRTASCategory="2" aaxIdentifier="com.auricaudio.aurichalo"
+              pluginWantsMidiIn="1" pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0"
+              pluginVST3Category="Fx" pluginEditorRequiresKeys="0" pluginAUExportPrefix="AuricHaloAU"
+              pluginAUMainType="'aufx'" pluginRTASCategory="2" aaxIdentifier="com.auricaudio.aurichalo"
               pluginAAXCategory="2" bundleIdentifier="com.auricaudio.aurichalo"
-              pluginAAXDisableBypass="0" pluginAAXDisableMultiMono="0">
+              pluginAAXDisableBypass="0" pluginAAXDisableMultiMono="0" enableIAA="0"
+              pluginAAXDisableAAXMultiMono="1" pluginCharacteristicsValue="pluginWantsMidiIn">
   <MAINGROUP id="MainGrp" name="AuricHalo">
     <GROUP id="{DSP001}" name="DSP">
       <FILE id="dsp001" name="HaloEQ.cpp" compile="1" resource="0" file="source/DSP/HaloEQ.cpp"/>
@@ -25,6 +25,11 @@
     <GROUP id="{UI001}" name="UI">
       <FILE id="ui001" name="LookAndFeel.cpp" compile="1" resource="0" file="source/UI/LookAndFeel.cpp"/>
       <FILE id="ui002" name="LookAndFeel.h" compile="0" resource="0" file="source/UI/LookAndFeel.h"/>
+      <FILE id="ui007" name="LicenseDialog.cpp" compile="1" resource="0"
+            file="source/UI/LicenseDialog.cpp"/>
+      <FILE id="ui008" name="LicenseDialog.h" compile="0" resource="0" file="source/UI/LicenseDialog.h"/>
+      <FILE id="ui009" name="LevelMeter.cpp" compile="1" resource="0" file="source/UI/LevelMeter.cpp"/>
+      <FILE id="ui010" name="LevelMeter.h" compile="0" resource="0" file="source/UI/LevelMeter.h"/>
       <GROUP id="{COMP001}" name="Components">
         <FILE id="comp003" name="HaloKnob.cpp" compile="1" resource="0" file="source/UI/Components/HaloKnob.cpp"/>
         <FILE id="comp004" name="HaloKnob.h" compile="0" resource="0" file="source/UI/Components/HaloKnob.h"/>
@@ -32,6 +37,10 @@
               file="source/UI/Components/AudioFilePlayer.cpp"/>
         <FILE id="comp006" name="AudioFilePlayer.h" compile="0" resource="0"
               file="source/UI/Components/AudioFilePlayer.h"/>
+        <FILE id="comp007" name="HaloSlider.cpp" compile="1" resource="0"
+              file="source/UI/Components/HaloSlider.cpp"/>
+        <FILE id="comp008" name="HaloSlider.h" compile="0" resource="0"
+              file="source/UI/Components/HaloSlider.h"/>
       </GROUP>
     </GROUP>
     <GROUP id="{SRC001}" name="Source">
@@ -45,6 +54,12 @@
             file="source/AuricHaloEditor.cpp"/>
       <FILE id="src006" name="AuricHaloEditor.h" compile="0" resource="0"
             file="source/AuricHaloEditor.h"/>
+      <FILE id="src007" name="LicenseManager.cpp" compile="1" resource="0"
+            file="source/LicenseManager.cpp"/>
+      <FILE id="src008" name="LicenseManager.h" compile="0" resource="0"
+            file="source/LicenseManager.h"/>
+      <FILE id="src009" name="StandaloneApp.cpp" compile="1" resource="0"
+            file="source/StandaloneApp.cpp" xcodeResource="0" compilerFlagSchemes="Standalone"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
@@ -54,6 +69,8 @@
     <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
             useGlobalPath="1"/>
     <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -64,7 +81,9 @@
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
-               JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0"/>
+               JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0" JUCE_USE_ANDROID_OBOE="0"
+               JUCE_USE_ANDROID_OPENSLES="0" JUCE_PLUGINHOST_VST3="0" JUCE_PLUGINHOST_AU="0"
+               JUCE_STANDALONE_FILTER_WINDOW_USE_KIOSK_MODE="0"/>
   <EXPORTFORMATS>
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
@@ -85,6 +104,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../Downloads/JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
     <XCODE_MAC targetFolder="Builds/MacOSX" xcodeValidArchs="x86_64,arm64">
@@ -109,6 +129,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../Downloads/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>

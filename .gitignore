@@ -11,3 +11,14 @@ cmake-build-*/
 Builds/**/.vs/
 *.vsidx
 Builds/
+
+# License system - DO NOT COMMIT
+license_keys.txt
+scripts/generate_license_key.py
+*.lic
+
+# AAX Signing Keys - DO NOT COMMIT
+private_key.pem
+public_key.pem
+*.pem
+*_key.pem

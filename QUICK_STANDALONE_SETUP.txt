@@ -1,0 +1,83 @@
+═══════════════════════════════════════════════════════════════
+  AURIC HALO STANDALONE - QUICK AUDIO SETUP
+═══════════════════════════════════════════════════════════════
+
+🎸 PROBLEM: Audio dari Loopback tidak masuk ke AuricHalo Standalone
+
+✅ SOLUSI CEPAT:
+
+1. BUKA AURICHALO STANDALONE
+   /Applications/AuricHalo.app
+
+2. BUKA AUDIO SETTINGS
+   Menu: Options → Audio/MIDI Settings
+   (atau klik icon gear/settings)
+
+3. PILIH DEVICE
+   Input Device:  [Loopback Audio]
+   Output Device: [Your Speakers]
+
+4. AKTIFKAN CHANNELS
+   Input Channels:
+   ☑ Channel 1
+   ☑ Channel 2
+
+5. SET SAMPLE RATE
+   Sample Rate: 44100 Hz (atau 48000 Hz)
+   Buffer Size: 512 samples
+
+6. TEST
+   - Play gitar
+   - Check Input Meter (bar kiri)
+   - Harus ada signal!
+
+═══════════════════════════════════════════════════════════════
+
+🔧 TROUBLESHOOTING:
+
+❌ Loopback tidak muncul di list?
+   → Restart AuricHalo
+   → Check Loopback app (harus running)
+
+❌ Device terpilih tapi no signal?
+   → Check Loopback routing (Output 1+2)
+   → Check input channels (enable 1-2)
+   → Check Input Gain di AuricHalo (harus > 0%)
+
+❌ Audio crackling?
+   → Increase buffer size (512 → 1024)
+   → Close other audio apps
+
+═══════════════════════════════════════════════════════════════
+
+🎯 RECOMMENDED SETUP:
+
+UNTUK LIVE PLAYING:
+- Input: Direct Audio Interface (skip Loopback)
+- Buffer: 256 samples
+- Lower latency!
+
+UNTUK RECORDING:
+- Input: Loopback Virtual Device
+- Buffer: 512 samples
+- More stable!
+
+UNTUK TESTING:
+- Input: Built-in Microphone
+- Quick test tanpa setup
+
+═══════════════════════════════════════════════════════════════
+
+💡 PRO TIP:
+
+Jika standalone terlalu ribet, gunakan plugin di DAW:
+- VST3 di Ableton/Reaper
+- AU di Logic Pro/GarageBand
+- DAW handle audio routing otomatis!
+
+═══════════════════════════════════════════════════════════════
+
+📚 DETAIL LENGKAP:
+Lihat: STANDALONE_AUDIO_INPUT_FIX.md
+
+═══════════════════════════════════════════════════════════════

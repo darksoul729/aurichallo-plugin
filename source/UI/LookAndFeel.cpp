@@ -201,3 +201,82 @@ void AuricHaloLookAndFeel::drawButtonText(juce::Graphics& g, juce::TextButton& b
     g.setColour(button.getToggleState() ? juce::Colour(0xffffffff) : colorGoldMain);
     g.drawText(button.getButtonText(), textBounds, juce::Justification::centred, true);
 }
+
+void AuricHaloLookAndFeel::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height,
+                                           float sliderPos, float minSliderPos, float maxSliderPos,
+                                           const juce::Slider::SliderStyle style, juce::Slider& slider)
+{
+    juce::ignoreUnused(minSliderPos, maxSliderPos, style);
+    
+    auto bounds = juce::Rectangle<float>((float)x, (float)y, (float)width, (float)height);
+    auto trackWidth = juce::jmin(20.0f, bounds.getWidth() * 0.5f);
+    auto trackBounds = bounds.withSizeKeepingCentre(trackWidth, bounds.getHeight());
+    
+    // === TRACK (Groove) ===
+    // Shadow untuk depth
+    g.setColour(juce::Colours::black.withAlpha(0.8f));
+    g.fillRoundedRectangle(trackBounds.translated(1, 1), trackWidth * 0.5f);
+    
+    // Track body (dark groove)
+    juce::ColourGradient trackGrad(
+        juce::Colour(0xff1a1a1a), trackBounds.getX(), trackBounds.getY(),
+        juce::Colour(0xff2a2a2a), trackBounds.getRight(), trackBounds.getY(),
+        false
+    );
+    g.setGradientFill(trackGrad);
+    g.fillRoundedRectangle(trackBounds, trackWidth * 0.5f);
+    
+    // Inner shadow (embossed groove)
+    g.setColour(juce::Colours::black.withAlpha(0.6f));
+    g.drawRoundedRectangle(trackBounds.reduced(1), trackWidth * 0.5f - 1, 1.0f);
+    
+    // === VALUE FILL (Active portion) ===
+    float normalizedValue = (float)slider.getValue() / (float)slider.getMaximum();
+    float fillHeight = trackBounds.getHeight() * (1.0f - normalizedValue);
+    auto fillBounds = trackBounds.removeFromBottom(trackBounds.getHeight() - fillHeight);
+    
+    // Gradient from purple to gold
+    juce::ColourGradient fillGrad(
+        colorPurpleGlow, fillBounds.getCentreX(), fillBounds.getBottom(),
+        colorGoldMain, fillBounds.getCentreX(), fillBounds.getY(),
+        false
+    );
+    g.setGradientFill(fillGrad);
+    g.fillRoundedRectangle(fillBounds.reduced(2), (trackWidth - 4) * 0.5f);
+    
+    // Glow effect
+    g.setColour(colorPurpleGlow.withAlpha(0.3f));
+    g.fillRoundedRectangle(fillBounds.reduced(1), (trackWidth - 2) * 0.5f);
+    
+    // === THUMB (Slider handle) ===
+    auto thumbWidth = trackWidth * 1.5f;
+    auto thumbHeight = 12.0f;
+    auto thumbY = sliderPos - thumbHeight * 0.5f;
+    auto thumbBounds = juce::Rectangle<float>(
+        trackBounds.getCentreX() - thumbWidth * 0.5f,
+        thumbY,
+        thumbWidth,
+        thumbHeight
+    );
+    
+    // Thumb shadow
+    g.setColour(juce::Colours::black.withAlpha(0.7f));
+    g.fillRoundedRectangle(thumbBounds.translated(0, 2), 3.0f);
+    
+    // Thumb body (gold gradient)
+    juce::ColourGradient thumbGrad(
+        colorGoldHighlight, thumbBounds.getCentreX(), thumbBounds.getY(),
+        colorGoldShadow, thumbBounds.getCentreX(), thumbBounds.getBottom(),
+        false
+    );
+    g.setGradientFill(thumbGrad);
+    g.fillRoundedRectangle(thumbBounds, 3.0f);
+    
+    // Thumb highlight
+    g.setColour(juce::Colours::white.withAlpha(0.4f));
+    g.fillRoundedRectangle(thumbBounds.reduced(2, 1).removeFromTop(3), 2.0f);
+    
+    // Thumb border
+    g.setColour(juce::Colours::black.withAlpha(0.5f));
+    g.drawRoundedRectangle(thumbBounds, 3.0f, 1.0f);
+}

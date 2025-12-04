@@ -8,30 +8,36 @@ AuricHaloEditor::AuricHaloEditor(AuricHaloProcessor& p)
     
     // --- Setup Components ---
     
-    // 1. Tone Knob (Kiri Atas)
+    // 1. Input Slider (Kiri - Vertical)
+    addAndMakeVisible(inputSlider);
+    inputSlider.setLabel("INPUT");
+    inputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        processor.getParameters().getAPVTS(), "input", inputSlider.getSlider());
+    
+    // 2. Output Slider (Kanan - Vertical)
+    addAndMakeVisible(outputSlider);
+    outputSlider.setLabel("OUTPUT");
+    outputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        processor.getParameters().getAPVTS(), "output", outputSlider.getSlider());
+    
+    // 3. Tone Knob (Kiri Bawah)
     addAndMakeVisible(toneKnob);
     toneKnob.setLabel("TONE");
     toneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         processor.getParameters().getAPVTS(), "tone", toneKnob.getSlider());
 
-    // 2. Drive Knob (Tengah - Main)
+    // 4. Drive Knob (Tengah - Main)
     addAndMakeVisible(driveKnob);
     driveKnob.setLabel("DRIVE");
     driveKnob.setIsMainKnob(true); 
     driveAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         processor.getParameters().getAPVTS(), "drive", driveKnob.getSlider());
 
-    // 3. Mix Knob (Kanan Atas)
+    // 5. Mix Knob (Kanan Bawah)
     addAndMakeVisible(mixKnob);
     mixKnob.setLabel("MIX");
     mixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         processor.getParameters().getAPVTS(), "mix", mixKnob.getSlider());
-
-    // 4. Output Knob (Kanan Bawah)
-    addAndMakeVisible(outputKnob);
-    outputKnob.setLabel("OUTPUT");
-    outputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        processor.getParameters().getAPVTS(), "output", outputKnob.getSlider());
 
     // 5. Halo Engine Button (Switch)
     addAndMakeVisible(haloEngineButton);
@@ -48,10 +54,75 @@ AuricHaloEditor::AuricHaloEditor(AuricHaloProcessor& p)
         // Trigger repaint area tengah saat switch ditekan
         repaint(driveKnob.getBounds().expanded(60));
     };
+    
+    // 6. License Button
+    addAndMakeVisible(licenseButton);
+    licenseButton.setButtonText("License");
+    licenseButton.onClick = [this]() {
+        showLicenseDialog();
+    };
+    
+    // 7. Level Meters
+    addAndMakeVisible(inputMeter);
+    inputMeter.setIsInput(true);
+    inputMeter.setAlwaysOnTop(true);
+    
+    addAndMakeVisible(outputMeter);
+    outputMeter.setIsInput(false);
+    outputMeter.setAlwaysOnTop(true);
+    
+    // 8. Oversampling Selector
+    addAndMakeVisible(oversamplingLabel);
+    oversamplingLabel.setText("Oversampling", juce::dontSendNotification);
+    oversamplingLabel.setJustificationType(juce::Justification::centred);
+    oversamplingLabel.setColour(juce::Label::textColourId, juce::Colour(0xffd4af37));
+    oversamplingLabel.setFont(juce::FontOptions(12.0f, juce::Font::bold));
+    oversamplingLabel.setAlwaysOnTop(true);
+    
+    addAndMakeVisible(oversamplingBox);
+    oversamplingBox.addItem("Off", 1);
+    oversamplingBox.addItem("2x", 2);
+    oversamplingBox.addItem("4x", 3);
+    oversamplingBox.setColour(juce::ComboBox::backgroundColourId, juce::Colour(0xff2a2a2a));
+    oversamplingBox.setColour(juce::ComboBox::textColourId, juce::Colours::white);
+    oversamplingBox.setColour(juce::ComboBox::outlineColourId, juce::Colour(0xffd4af37));
+    oversamplingBox.setColour(juce::ComboBox::arrowColourId, juce::Colour(0xffd4af37));
+    oversamplingBox.setAlwaysOnTop(true);
+    oversamplingAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.getParameters().getAPVTS(), "oversampling", oversamplingBox);
+    
+    // 9. Size Selector
+    addAndMakeVisible(sizeLabel);
+    sizeLabel.setText("UI Size", juce::dontSendNotification);
+    sizeLabel.setJustificationType(juce::Justification::centred);
+    sizeLabel.setColour(juce::Label::textColourId, juce::Colour(0xffd4af37));
+    sizeLabel.setFont(juce::FontOptions(12.0f, juce::Font::bold));
+    sizeLabel.setAlwaysOnTop(true);
+    
+    addAndMakeVisible(sizeSelector);
+    sizeSelector.addItem("Small", 1);
+    sizeSelector.addItem("Medium", 2);
+    sizeSelector.addItem("Large", 3);
+    sizeSelector.setSelectedId(2); // Medium by default
+    sizeSelector.setColour(juce::ComboBox::backgroundColourId, juce::Colour(0xff2a2a2a));
+    sizeSelector.setColour(juce::ComboBox::textColourId, juce::Colours::white);
+    sizeSelector.setColour(juce::ComboBox::outlineColourId, juce::Colour(0xffd4af37));
+    sizeSelector.setColour(juce::ComboBox::arrowColourId, juce::Colour(0xffd4af37));
+    sizeSelector.setAlwaysOnTop(true);
+    sizeSelector.onChange = [this]() {
+        int selectedId = sizeSelector.getSelectedId();
+        if (selectedId == 1) setUISize(UISize::Small);
+        else if (selectedId == 2) setUISize(UISize::Medium);
+        else if (selectedId == 3) setUISize(UISize::Large);
+    };
 
     // --- Window Setup ---
     setSize(700, 550); 
-    startTimerHz(30);  
+    startTimerHz(30);
+    
+    // Check license status on startup
+    DBG("AuricHaloEditor: Constructor - checking license status");
+    checkLicenseStatus();  
 }
 
 AuricHaloEditor::~AuricHaloEditor()
@@ -62,6 +133,10 @@ AuricHaloEditor::~AuricHaloEditor()
 
 void AuricHaloEditor::timerCallback()
 {
+    // Update level meters
+    inputMeter.setLevel(processor.getInputLevel());
+    outputMeter.setLevel(processor.getOutputLevel());
+    
     // Optimisasi Repaint: Hanya area glow
     if (haloEngineOn)
     {
@@ -130,8 +205,8 @@ void AuricHaloEditor::paint(juce::Graphics& g)
     // -------------------------------------------------------------------------
     // 2. 3D CARD / CHASSIS (Panel Utama)
     // -------------------------------------------------------------------------
-    // Area panel utama (sedikit lebih kecil dari window)
-    auto cardBounds = getLocalBounds().toFloat().reduced(20.0f); 
+    // Area panel utama (FULLSCREEN - no modal)
+    auto cardBounds = getLocalBounds().toFloat().reduced(5.0f); 
     
     // Shadow Drop untuk Card (Agar terlihat melayang/tebal)
     {
@@ -199,75 +274,241 @@ void AuricHaloEditor::paint(juce::Graphics& g)
     }
 
     // -------------------------------------------------------------------------
-    // 5. TEXT & TYPOGRAPHY
+    // 5. TEXT & TYPOGRAPHY (Responsive)
     // -------------------------------------------------------------------------
     auto center = cardBounds.getCentreX();
-
+    
+    // Calculate text scale
+    float textScale = w / 700.0f;
+    
     // "AURIC" Title
-    g.setFont(juce::FontOptions("Arial", 42.0f, juce::Font::bold));
+    float auricSize = 42.0f * textScale;
+    g.setFont(juce::FontOptions("Arial", auricSize, juce::Font::bold));
     // Text Shadow (emboss effect)
     g.setColour(juce::Colours::black.withAlpha(0.7f));
-    g.drawText("AURIC", 0, 53, getWidth(), 50, juce::Justification::centred); 
+    g.drawText("AURIC", 0, (int)(53 * textScale), getWidth(), (int)(50 * textScale), juce::Justification::centred); 
     // Main Gold Gradient Text
-    juce::ColourGradient goldTextGrad(juce::Colour(0xfff4d03f), center, 40.0f, juce::Colour(0xffc19a2e), center, 90.0f, false);
+    juce::ColourGradient goldTextGrad(juce::Colour(0xfff4d03f), center, 40.0f * textScale, juce::Colour(0xffc19a2e), center, 90.0f * textScale, false);
     g.setGradientFill(goldTextGrad);
-    g.drawText("AURIC", 0, 50, getWidth(), 50, juce::Justification::centred);
+    g.drawText("AURIC", 0, (int)(50 * textScale), getWidth(), (int)(50 * textScale), juce::Justification::centred);
 
     // "HALO" Title
-    g.setFont(juce::FontOptions("Arial", 58.0f, juce::Font::bold));
+    float haloSize = 58.0f * textScale;
+    g.setFont(juce::FontOptions("Arial", haloSize, juce::Font::bold));
     g.setColour(juce::Colours::black.withAlpha(0.7f));
-    g.drawText("HALO", 0, 93, getWidth(), 60, juce::Justification::centred);
+    g.drawText("HALO", 0, (int)(93 * textScale), getWidth(), (int)(60 * textScale), juce::Justification::centred);
     
-    juce::ColourGradient purpleTextGrad(juce::Colour(0xffe9d5ff), center, 90.0f, juce::Colour(0xffa855f7), center, 150.0f, false);
+    juce::ColourGradient purpleTextGrad(juce::Colour(0xffe9d5ff), center, 90.0f * textScale, juce::Colour(0xffa855f7), center, 150.0f * textScale, false);
     g.setGradientFill(purpleTextGrad);
-    g.drawText("HALO", 0, 90, getWidth(), 60, juce::Justification::centred);
+    g.drawText("HALO", 0, (int)(90 * textScale), getWidth(), (int)(60 * textScale), juce::Justification::centred);
 
     // Subtitle & Decoration Line
     g.setColour(juce::Colour(0xffa855f7).withAlpha(0.8f));
-    g.setFont(juce::FontOptions("Arial", 14.0f, juce::Font::bold));
-    g.drawText("HARMONIC SATURATOR", 0, 145, getWidth(), 20, juce::Justification::centred);
+    float subtitleSize = 14.0f * textScale;
+    g.setFont(juce::FontOptions("Arial", subtitleSize, juce::Font::bold));
+    g.drawText("HARMONIC SATURATOR", 0, (int)(145 * textScale), getWidth(), (int)(20 * textScale), juce::Justification::centred);
 
     g.setColour(juce::Colour(0xff444444));
-    g.fillRect(center - 80, 170.0f, 160.0f, 2.0f); // Garis dekorasi
+    g.fillRect(center - 80 * textScale, 170.0f * textScale, 160.0f * textScale, 2.0f); // Garis dekorasi
 
-    // Label Halo Engine (Plate Background)
+    // Label Halo Engine (Above button, not overlapping)
     auto btnBounds = haloEngineButton.getBounds();
-    // Background label kecil (plate hitam)
-    juce::Rectangle<float> labelPlate((float)btnBounds.getX() - 30, (float)btnBounds.getY() - 25, (float)btnBounds.getWidth() + 60, 20.0f);
-    
-    g.setColour(juce::Colour(0xff111111));
-    g.fillRoundedRectangle(labelPlate, 4.0f);
-    g.setColour(juce::Colours::grey.withAlpha(0.5f)); // Border tipis plate
-    g.drawRoundedRectangle(labelPlate, 4.0f, 1.0f);
+    float labelSize = 10.0f * textScale;
+    float labelY = (float)btnBounds.getY() - 18 * textScale;
     
     g.setColour(juce::Colour(0xffd4af37));
-    g.setFont(juce::FontOptions("Arial", 11.0f, juce::Font::bold));
-    g.drawText("HALO ENGINE", labelPlate, juce::Justification::centred);
+    g.setFont(juce::FontOptions("Arial", labelSize, juce::Font::bold));
+    g.drawText("HALO ENGINE", 
+               (float)btnBounds.getX() - 20, 
+               labelY, 
+               (float)btnBounds.getWidth() + 40, 
+               15.0f * textScale, 
+               juce::Justification::centred);
 }
 
 void AuricHaloEditor::resized()
 {
     auto bounds = getLocalBounds();
+    float w = (float)bounds.getWidth();
+    float h = (float)bounds.getHeight();
     auto center = bounds.getCentre();
     
-    // Ukuran knob
-    const int mainKnobSize = 220;
-    const int smallKnobSize = 110;
+    // === RESPONSIVE SIZING ===
+    // Base sizes (for Medium = 700x550)
+    const float baseWidth = 700.0f;
+    const float baseHeight = 550.0f;
     
-    // 1. Main Knob (Tengah Mutlak)
-    driveKnob.setBounds(center.x - mainKnobSize/2, center.y - 30, mainKnobSize, mainKnobSize);
+    // Calculate actual scale from window size
+    float widthScale = w / baseWidth;
+    float heightScale = h / baseHeight;
+    float actualScale = juce::jmin(widthScale, heightScale); // Use smaller to maintain aspect ratio
     
-    // 2. Knob Samping (Relatif terhadap Main Knob)
-    // Y position sejajar
-    int smallKnobY = driveKnob.getY() + 10;
-    int offsetX = 180; // Jarak horizontal dari tengah
+    // Component sizes (scaled)
+    const int mainKnobSize = (int)(180 * actualScale);
+    const int smallKnobSize = (int)(90 * actualScale);
+    const int sliderWidth = (int)(40 * actualScale);
+    const int sliderHeight = (int)(200 * actualScale);
     
-    toneKnob.setBounds(center.x - offsetX - smallKnobSize, smallKnobY, smallKnobSize, smallKnobSize);
-    mixKnob.setBounds(center.x + offsetX, smallKnobY, smallKnobSize, smallKnobSize);
+    // Level meters (paling kiri dan kanan)
+    const int meterWidth = (int)(22 * actualScale);
+    const int meterHeight = (int)(260 * actualScale);
+    const int meterMargin = (int)(12 * actualScale);
     
-    // 3. Output Knob (Di bawah Mix Knob)
-    outputKnob.setBounds(mixKnob.getX(), mixKnob.getBottom() + 30, smallKnobSize, smallKnobSize);
+    inputMeter.setBounds(meterMargin, center.y - meterHeight/2, meterWidth, meterHeight);
+    outputMeter.setBounds((int)w - meterMargin - meterWidth, center.y - meterHeight/2, meterWidth, meterHeight);
     
-    // 4. Halo Engine Switch (Di bawah Tone Knob)
-    haloEngineButton.setBounds(toneKnob.getX() + 25, toneKnob.getBottom() + 50, 60, 40);
+    // === LAYOUT AREAS ===
+    int titleHeight = (int)(170 * actualScale);
+    int mainAreaY = titleHeight;
+    int mainAreaHeight = (int)(300 * actualScale);
+    
+    // === MAIN CONTROLS (Centered Grid) ===
+    
+    // 1. DRIVE KNOB (Center)
+    int driveY = mainAreaY + (mainAreaHeight - mainKnobSize) / 2;
+    driveKnob.setBounds(center.x - mainKnobSize/2, driveY, mainKnobSize, mainKnobSize);
+    
+    // 2. INPUT SLIDER (Left of Drive, aligned with Drive center)
+    int sliderOffsetX = (int)(145 * actualScale);
+    int sliderY = driveY + (mainKnobSize - sliderHeight) / 2; // Align with Drive center
+    inputSlider.setBounds(center.x - sliderOffsetX - sliderWidth/2, sliderY, sliderWidth, sliderHeight);
+    
+    // 3. OUTPUT SLIDER (Right of Drive, aligned with Drive center)
+    outputSlider.setBounds(center.x + sliderOffsetX - sliderWidth/2, sliderY, sliderWidth, sliderHeight);
+    
+    // 4. TONE KNOB (Left side, vertically centered with Drive)
+    int sideKnobOffsetX = (int)(250 * actualScale);
+    int sideKnobY = driveY + (mainKnobSize - smallKnobSize) / 2; // Vertically centered with Drive
+    toneKnob.setBounds(center.x - sideKnobOffsetX - smallKnobSize/2, sideKnobY, smallKnobSize, smallKnobSize);
+    
+    // 5. MIX KNOB (Right side, vertically centered with Drive)
+    mixKnob.setBounds(center.x + sideKnobOffsetX - smallKnobSize/2, sideKnobY, smallKnobSize, smallKnobSize);
+    
+    // 6. HALO ENGINE BUTTON (Below Tone, with space)
+    int buttonWidth = (int)(90 * actualScale);
+    int buttonHeight = (int)(30 * actualScale);
+    int buttonY = toneKnob.getBottom() + (int)(25 * actualScale); // Space below Tone
+    haloEngineButton.setBounds(
+        toneKnob.getX() + (toneKnob.getWidth() - buttonWidth) / 2,
+        buttonY,
+        buttonWidth,
+        buttonHeight
+    );
+    
+    // === TOP BAR ===
+    // 7. LICENSE BUTTON (Top right)
+    int topMargin = (int)(10 * actualScale);
+    int licenseWidth = (int)(90 * actualScale);
+    int licenseHeight = (int)(28 * actualScale);
+    licenseButton.setBounds((int)w - licenseWidth - topMargin, topMargin, licenseWidth, licenseHeight);
+    
+    // === BOTTOM BAR ===
+    int bottomMargin = (int)(12 * actualScale);
+    int comboWidth = (int)(110 * actualScale);
+    int comboHeight = (int)(24 * actualScale);
+    int labelHeight = (int)(18 * actualScale);
+    int bottomY = (int)h - bottomMargin - comboHeight - labelHeight - 5;
+    
+    // 8. OVERSAMPLING (Bottom left)
+    int leftX = (int)(50 * actualScale);
+    oversamplingLabel.setBounds(leftX, bottomY, comboWidth, labelHeight);
+    oversamplingBox.setBounds(leftX, bottomY + labelHeight + 3, comboWidth, comboHeight);
+    
+    // 9. SIZE SELECTOR (Bottom right)
+    int rightX = (int)w - (int)(50 * actualScale) - comboWidth;
+    sizeLabel.setBounds(rightX, bottomY, comboWidth, labelHeight);
+    sizeSelector.setBounds(rightX, bottomY + labelHeight + 3, comboWidth, comboHeight);
+}
+
+void AuricHaloEditor::checkLicenseStatus()
+{
+    auto& licenseManager = processor.getLicenseManager();
+    
+    // Update license button text
+    auto status = licenseManager.getStatus();
+    DBG("checkLicenseStatus: status = " + juce::String((int)status));
+    
+    if (status == LicenseManager::Status::Licensed)
+    {
+        DBG("checkLicenseStatus: Plugin is licensed");
+        licenseButton.setButtonText("Licensed");
+        licenseButton.setColour(juce::TextButton::buttonColourId, juce::Colours::green.darker());
+    }
+    else
+    {
+        DBG("checkLicenseStatus: Plugin is NOT licensed - will show dialog");
+        licenseButton.setButtonText("Activate");
+        licenseButton.setColour(juce::TextButton::buttonColourId, juce::Colours::red.darker());
+        
+        // Show license dialog immediately if not licensed
+        juce::Timer::callAfterDelay(500, [this]() {
+            DBG("Timer callback: About to show license dialog");
+            showLicenseDialog();
+        });
+    }
+}
+
+void AuricHaloEditor::showLicenseDialog()
+{
+    DBG("showLicenseDialog: Called");
+    
+    if (licenseDialog != nullptr)
+    {
+        DBG("showLicenseDialog: Dialog already showing, returning");
+        return; // Already showing
+    }
+    
+    DBG("showLicenseDialog: Creating new dialog");
+    auto& licenseManager = processor.getLicenseManager();
+    
+    licenseDialog.reset(new LicenseDialog(licenseManager));
+    DBG("showLicenseDialog: Dialog created");
+    
+    licenseDialog->onLicenseActivated = [this]()
+    {
+        DBG("License activated callback received");
+        // Refresh license status
+        juce::MessageManager::callAsync([this]()
+        {
+            checkLicenseStatus();
+            licenseDialog.reset(); // Clean up dialog
+        });
+    };
+    
+    // Add as child component (overlay on top of editor)
+    DBG("showLicenseDialog: Adding as child component");
+    addAndMakeVisible(licenseDialog.get());
+    licenseDialog->setBounds(getLocalBounds());
+    licenseDialog->toFront(true);
+    DBG("showLicenseDialog: Dialog should now be visible");
+}
+
+void AuricHaloEditor::setUISize(UISize newSize)
+{
+    currentSize = newSize;
+    
+    // Set scale factor based on size
+    switch (currentSize)
+    {
+        case UISize::Small:
+            scaleFactor = 0.75f;
+            setSize(525, 412);  // 75% of 700x550
+            break;
+        case UISize::Medium:
+            scaleFactor = 1.0f;
+            setSize(700, 550);  // Default
+            break;
+        case UISize::Large:
+            scaleFactor = 1.25f;
+            setSize(875, 687);  // 125% of 700x550
+            break;
+    }
+    
+    updateSizeForCurrentScale();
+}
+
+void AuricHaloEditor::updateSizeForCurrentScale()
+{
+    resized();
+    repaint();
 }

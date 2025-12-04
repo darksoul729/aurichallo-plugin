@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# VST3 Post-Install Script
+
+echo "Installing VST3 plugin..."
+
+# Kill any running DAWs that might lock the plugin
+killall "Ableton Live" 2>/dev/null || true
+killall "Reaper" 2>/dev/null || true
+killall "FL Studio" 2>/dev/null || true
+
+# Set permissions
+chmod -R 755 "/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3"
+
+echo "VST3 plugin installed successfully"
+
+exit 0
