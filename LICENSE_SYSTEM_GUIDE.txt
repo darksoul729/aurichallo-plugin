@@ -1,0 +1,186 @@
+========================================
+  AURIC HALO - LICENSE SYSTEM GUIDE
+========================================
+
+UNTUK DEVELOPER (KAMU):
+-----------------------
+
+1. CARA GENERATE LICENSE KEY:
+
+   Opsi 1 - Pakai Batch Script (Windows):
+   - Jalankan: scripts\generate_license_key.bat
+   - Copy key yang muncul
+   - Kirim ke client
+
+   Opsi 2 - Pakai Python Script (Lebih Advanced):
+   - Jalankan: python scripts\generate_license_key.py
+   - Pilih method (simple atau advanced)
+   - Copy key yang muncul
+   - Kirim ke client
+
+2. FORMAT LICENSE KEY:
+   
+   AURIC-XXXX-XXXX-XXXX-XXXX
+   
+   Contoh:
+   - AURIC-A1B2-C3D4-E5F6-G7H8
+   - AURIC-1234-5678-9ABC-DEF0
+
+3. VALIDASI KEY:
+   
+   Saat ini validasi sederhana:
+   - Key harus dimulai dengan "AURIC-"
+   - Minimal 16 karakter
+   
+   Untuk production, kamu bisa upgrade ke:
+   - Validasi dengan server online
+   - Cryptographic signature
+   - Hardware ID binding
+
+4. CARA KERJA:
+   
+   a. Client install plugin
+   b. Plugin jalan dalam trial mode (30 hari)
+   c. Setelah 30 hari atau client mau aktivasi:
+      - Buka plugin
+      - Klik tombol "License" atau "Activate"
+      - Input license key
+      - Klik "Activate"
+   d. Plugin tersimpan di:
+      %APPDATA%\Auric Audio\Auric Halo\license.dat
+
+5. DEACTIVATE LICENSE:
+   
+   Kalau client mau pindah komputer:
+   - Hapus file: %APPDATA%\Auric Audio\Auric Halo\license.dat
+   - Atau pakai tombol "Deactivate" di plugin
+
+========================================
+
+UNTUK CLIENT:
+-------------
+
+1. TRIAL MODE:
+   
+   - Plugin bisa dipakai GRATIS selama 30 hari
+   - Tidak perlu license key
+   - Semua fitur tersedia
+
+2. CARA AKTIVASI:
+   
+   a. Buka plugin di DAW kamu
+   b. Klik tombol "License" atau "Activate"
+   c. Input license key yang diberikan developer
+   d. Klik "Activate"
+   e. Selesai! Plugin sekarang licensed
+
+3. FORMAT LICENSE KEY:
+   
+   AURIC-XXXX-XXXX-XXXX-XXXX
+   
+   Contoh: AURIC-A1B2-C3D4-E5F6-G7H8
+
+4. TROUBLESHOOTING:
+   
+   Q: License key tidak diterima?
+   A: Pastikan format benar (AURIC-XXXX-XXXX-XXXX-XXXX)
+   
+   Q: Mau pindah komputer?
+   A: Deactivate di komputer lama, lalu activate di komputer baru
+   
+   Q: Trial sudah habis?
+   A: Hubungi developer untuk beli license key
+
+========================================
+
+UPGRADE SISTEM LISENSI (OPSIONAL):
+-----------------------------------
+
+Untuk production yang lebih secure, kamu bisa upgrade:
+
+1. ONLINE VALIDATION:
+   - Buat server API untuk validasi key
+   - Key dicek ke server setiap kali plugin dibuka
+   - Bisa track berapa kali key dipakai
+
+2. HARDWARE ID BINDING:
+   - Key terikat ke hardware ID komputer
+   - Tidak bisa dipakai di komputer lain
+   - Lebih secure tapi kurang fleksibel
+
+3. CRYPTOGRAPHIC SIGNATURE:
+   - Key di-sign dengan private key
+   - Plugin verify dengan public key
+   - Tidak bisa di-fake
+
+4. SUBSCRIPTION MODEL:
+   - Key expire setelah periode tertentu
+   - Client harus renew subscription
+   - Recurring revenue
+
+Untuk implementasi ini, butuh:
+- Backend server (Node.js, PHP, Python)
+- Database (MySQL, PostgreSQL)
+- API endpoint
+- Update code di LicenseManager.cpp
+
+========================================
+
+FILE PENTING:
+-------------
+
+1. source/LicenseManager.cpp - Logic lisensi
+2. source/LicenseManager.h - Header lisensi
+3. source/UI/LicenseDialog.cpp - UI dialog lisensi
+4. scripts/generate_license_key.bat - Generator key (Windows)
+5. scripts/generate_license_key.py - Generator key (Python)
+
+========================================
+
+CONTOH PENGGUNAAN:
+------------------
+
+Developer:
+1. Client mau beli plugin
+2. Developer jalankan: generate_license_key.bat
+3. Copy key: AURIC-A1B2-C3D4-E5F6-G7H8
+4. Kirim ke client via email
+5. Client bayar
+6. Client aktivasi dengan key tersebut
+
+Client:
+1. Install plugin
+2. Buka plugin di DAW
+3. Klik "Activate"
+4. Input key: AURIC-A1B2-C3D4-E5F6-G7H8
+5. Klik "Activate"
+6. Plugin sekarang licensed!
+
+========================================
+
+HARGA & MONETISASI:
+-------------------
+
+Saran harga:
+- Trial: Gratis 30 hari
+- Personal License: $29 - $49
+- Professional License: $79 - $99
+- Lifetime Updates: +$20
+
+Platform jual:
+- Website sendiri (Gumroad, Paddle)
+- Plugin Boutique
+- KVR Marketplace
+- Splice
+
+========================================
+
+SUPPORT:
+--------
+
+Kalau ada pertanyaan tentang sistem lisensi:
+1. Baca dokumentasi ini
+2. Cek code di LicenseManager.cpp
+3. Test dengan generate key dan aktivasi
+
+========================================

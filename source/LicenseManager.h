@@ -4,67 +4,48 @@
 class LicenseManager
 {
 public:
-    LicenseManager();
-    ~LicenseManager();
-    
-    // License status
     enum class Status
     {
-        Unlicensed,
-        Trial,
         Licensed,
+        Trial,
         Expired
     };
     
-    // Check current license status
-    Status getStatus();
+    LicenseManager();
+    ~LicenseManager();
     
-    // Activate with license key
+    // Check if plugin is licensed
+    bool isLicensed() const;
+    
+    // Activate license with key
     bool activateLicense(const juce::String& licenseKey);
     
-    // Get remaining trial days
-    int getRemainingTrialDays();
+    // Get license info
+    juce::String getLicenseKey() const;
+    juce::String getLicenseEmail() const;
+    juce::String getLicenseStatus() const;
+    juce::String getLicenseInfo() const;
     
-    // Check if plugin is usable
-    bool isPluginUsable();
+    // Get status
+    Status getStatus() const;
     
-    // Get license info for display
-    juce::String getLicenseInfo();
+    // Trial mode
+    bool isTrialMode() const;
+    int getTrialDaysRemaining() const;
     
-    // Deactivate license (for testing)
+    // Deactivate license
     void deactivateLicense();
     
 private:
-    // Generate hardware ID (unique per computer)
-    juce::String getHardwareID();
-    
-    // Validate license key format and checksum
+    void loadLicenseFromFile();
+    void saveLicenseToFile();
     bool validateLicenseKey(const juce::String& key);
+    juce::File getLicenseFile() const;
     
-    // Check if license key matches this computer
-    bool isLicenseValidForThisComputer(const juce::String& key);
-    
-    // Trial management
-    void initializeTrial();
-    bool isTrialExpired();
-    juce::Time getTrialStartDate();
-    
-    // Storage
-    void saveLicenseData();
-    void loadLicenseData();
-    
-    // Encryption helpers
-    juce::String encrypt(const juce::String& data);
-    juce::String decrypt(const juce::String& data);
-    
-    // Constants
-    static constexpr int TRIAL_DAYS = 14;
-    static constexpr const char* PRODUCT_ID = "AURICHALO";
-    
-    // Cached data
-    Status cachedStatus;
-    juce::String cachedLicenseKey;
-    juce::Time trialStartDate;
+    bool licensed = false;
+    juce::String licenseKey;
+    juce::String licenseEmail;
+    juce::Time activationDate;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LicenseManager)
 };

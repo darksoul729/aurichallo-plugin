@@ -319,10 +319,10 @@ void AuricHaloEditor::paint(juce::Graphics& g)
     g.setColour(juce::Colour(0xffd4af37));
     g.setFont(juce::FontOptions("Arial", labelSize, juce::Font::bold));
     g.drawText("HALO ENGINE", 
-               (float)btnBounds.getX() - 20, 
-               labelY, 
-               (float)btnBounds.getWidth() + 40, 
-               15.0f * textScale, 
+               static_cast<int>((float)btnBounds.getX() - 20), 
+               static_cast<int>(labelY), 
+               static_cast<int>((float)btnBounds.getWidth() + 40), 
+               static_cast<int>(15.0f * textScale), 
                juce::Justification::centred);
 }
 

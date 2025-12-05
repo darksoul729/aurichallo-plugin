@@ -1,245 +1,173 @@
 #include "LicenseManager.h"
 
 LicenseManager::LicenseManager()
-    : cachedStatus(Status::Unlicensed)
 {
-    loadLicenseData();
+    loadLicenseFromFile();
 }
 
 LicenseManager::~LicenseManager()
 {
 }
 
-LicenseManager::Status LicenseManager::getStatus()
+bool LicenseManager::isLicensed() const
 {
-    // Check if we have a valid license
-    if (!cachedLicenseKey.isEmpty())
-    {
-        if (validateLicenseKey(cachedLicenseKey) && 
-            isLicenseValidForThisComputer(cachedLicenseKey))
-        {
-            cachedStatus = Status::Licensed;
-            return cachedStatus;
-        }
-    }
-    
-    // No trial - must have license
-    cachedStatus = Status::Unlicensed;
-    return cachedStatus;
+    return licensed;
 }
 
-bool LicenseManager::activateLicense(const juce::String& licenseKey)
+bool LicenseManager::activateLicense(const juce::String& key)
 {
-    // Validate format
-    if (!validateLicenseKey(licenseKey))
+    if (validateLicenseKey(key))
     {
-        return false;
+        licenseKey = key;
+        licensed = true;
+        activationDate = juce::Time::getCurrentTime();
+        saveLicenseToFile();
+        return true;
     }
-    
-    // Check if valid for this computer
-    if (!isLicenseValidForThisComputer(licenseKey))
-    {
-        return false;
-    }
-    
-    // Save license
-    cachedLicenseKey = licenseKey;
-    cachedStatus = Status::Licensed;
-    saveLicenseData();
-    
-    return true;
+    return false;
 }
 
-int LicenseManager::getRemainingTrialDays()
+juce::String LicenseManager::getLicenseKey() const
 {
-    if (cachedStatus == Status::Licensed)
-        return -1; // Licensed, no trial
+    return licenseKey;
+}
+
+juce::String LicenseManager::getLicenseEmail() const
+{
+    return licenseEmail;
+}
+
+juce::String LicenseManager::getLicenseStatus() const
+{
+    if (licensed)
+        return "Licensed";
+    else if (isTrialMode())
+        return "Trial (" + juce::String(getTrialDaysRemaining()) + " days remaining)";
+    else
+        return "Unlicensed";
+}
+
+bool LicenseManager::isTrialMode() const
+{
+    // For now, always allow trial
+    return !licensed;
+}
+
+int LicenseManager::getTrialDaysRemaining() const
+{
+    // Simple trial: 30 days from first use
+    auto firstUseFile = getLicenseFile();
+    if (!firstUseFile.existsAsFile())
+        return 30;
     
-    if (trialStartDate == juce::Time())
-        return TRIAL_DAYS;
-    
+    auto firstUseTime = juce::Time(firstUseFile.getCreationTime());
     auto now = juce::Time::getCurrentTime();
-    auto daysPassed = (now.toMilliseconds() - trialStartDate.toMilliseconds()) / (1000 * 60 * 60 * 24);
+    auto daysPassed = (now.toMilliseconds() - firstUseTime.toMilliseconds()) / (1000 * 60 * 60 * 24);
     
-    return juce::jmax(0, TRIAL_DAYS - (int)daysPassed);
-}
-
-bool LicenseManager::isPluginUsable()
-{
-    auto status = getStatus();
-    return (status == Status::Licensed);
-}
-
-juce::String LicenseManager::getLicenseInfo()
-{
-    auto status = getStatus();
-    
-    switch (status)
-    {
-        case Status::Licensed:
-            return "Licensed";
-            
-        case Status::Unlicensed:
-        default:
-            return "Not Activated - Please Enter License Key";
-    }
+    return juce::jmax(0, 30 - (int)daysPassed);
 }
 
 void LicenseManager::deactivateLicense()
 {
-    cachedLicenseKey = "";
-    cachedStatus = Status::Unlicensed;
-    saveLicenseData();
+    licensed = false;
+    licenseKey.clear();
+    licenseEmail.clear();
+    saveLicenseToFile();
 }
 
-// Private methods
-
-juce::String LicenseManager::getHardwareID()
+void LicenseManager::loadLicenseFromFile()
 {
-    // Generate unique ID based on computer hardware
-    juce::String hwid;
-    
-    // Use MAC address as base
-    auto addresses = juce::MACAddress::getAllAddresses();
-    if (!addresses.isEmpty())
+    auto file = getLicenseFile();
+    if (file.existsAsFile())
     {
-        hwid = addresses[0].toString().removeCharacters(":-");
+        auto xml = juce::parseXML(file);
+        if (xml != nullptr)
+        {
+            licenseKey = xml->getStringAttribute("key");
+            licenseEmail = xml->getStringAttribute("email");
+            licensed = xml->getBoolAttribute("licensed", false);
+            
+            if (licensed && !validateLicenseKey(licenseKey))
+            {
+                // Invalid license, reset
+                licensed = false;
+                licenseKey.clear();
+            }
+        }
     }
+}
+
+void LicenseManager::saveLicenseToFile()
+{
+    auto file = getLicenseFile();
+    file.getParentDirectory().createDirectory();
+    file.create();
     
-    // Add system ID
-    hwid += juce::SystemStats::getComputerName().removeCharacters(" ");
+    juce::XmlElement xml("AuricHaloLicense");
+    xml.setAttribute("key", licenseKey);
+    xml.setAttribute("email", licenseEmail);
+    xml.setAttribute("licensed", licensed);
+    xml.setAttribute("activationDate", activationDate.toISO8601(true));
     
-    // Simple hash using string hash
-    auto hashValue = hwid.hashCode64();
-    return juce::String::toHexString((juce::int64)hashValue).substring(0, 16).toUpperCase();
+    xml.writeTo(file);
 }
 
 bool LicenseManager::validateLicenseKey(const juce::String& key)
 {
-    // Format: XXXX-XXXX-XXXX-XXXX (16 chars + 3 dashes = 19 total)
-    if (key.length() != 19)
+    // Simple validation: key must be at least 16 characters
+    // In production, you'd validate against a server or use cryptographic signing
+    if (key.length() < 16)
         return false;
     
-    // Check format
-    if (key[4] != '-' || key[9] != '-' || key[14] != '-')
-        return false;
+    // For demo: accept any key starting with "AURIC-"
+    if (key.startsWith("AURIC-"))
+        return true;
     
-    // Remove dashes for validation
-    auto cleanKey = key.removeCharacters("-");
+    // TODO: Implement proper license validation
+    // - Check against server
+    // - Verify cryptographic signature
+    // - Check hardware ID binding
     
-    // Check if all alphanumeric
-    for (int i = 0; i < cleanKey.length(); ++i)
+    return false;
+}
+
+LicenseManager::Status LicenseManager::getStatus() const
+{
+    if (licensed)
+        return Status::Licensed;
+    else if (getTrialDaysRemaining() > 0)
+        return Status::Trial;
+    else
+        return Status::Expired;
+}
+
+juce::String LicenseManager::getLicenseInfo() const
+{
+    if (licensed)
     {
-        if (!juce::CharacterFunctions::isLetterOrDigit(cleanKey[i]))
-            return false;
+        juce::String info = "Licensed to: ";
+        info += licenseEmail;
+        info += "\nActivated: ";
+        info += activationDate.toString(true, true);
+        return info;
     }
-    
-    // Validate checksum (last 4 chars)
-    auto keyData = cleanKey.substring(0, 12);
-    auto checksum = cleanKey.substring(12);
-    
-    // Simple checksum validation using string hash
-    auto hashValue = (PRODUCT_ID + keyData).hashCode();
-    auto expectedChecksum = juce::String::toHexString(hashValue).substring(0, 4).toUpperCase();
-    
-    return checksum.equalsIgnoreCase(expectedChecksum);
+    else if (isTrialMode())
+    {
+        juce::String info = "Trial Mode\n";
+        info += juce::String(getTrialDaysRemaining());
+        info += " days remaining";
+        return info;
+    }
+    else
+    {
+        return juce::String("No license found\nPlease purchase a license to continue using this plugin.");
+    }
 }
 
-bool LicenseManager::isLicenseValidForThisComputer(const juce::String& key)
-{
-    // TEMPORARY: Disable hardware lock for testing
-    // Any valid checksum will work
-    return true;
-    
-    /* TODO: Re-enable for production
-    // Extract hardware ID from license key
-    auto cleanKey = key.removeCharacters("-");
-    auto keyHWID = cleanKey.substring(4, 12); // 8 chars for HWID
-    
-    // Get this computer's HWID
-    auto thisHWID = getHardwareID().substring(0, 8);
-    
-    return keyHWID.equalsIgnoreCase(thisHWID);
-    */
-}
-
-void LicenseManager::initializeTrial()
-{
-    trialStartDate = juce::Time::getCurrentTime();
-    saveLicenseData();
-}
-
-bool LicenseManager::isTrialExpired()
-{
-    if (trialStartDate == juce::Time())
-        return false;
-    
-    auto now = juce::Time::getCurrentTime();
-    auto daysPassed = (now.toMilliseconds() - trialStartDate.toMilliseconds()) / (1000 * 60 * 60 * 24);
-    
-    return daysPassed >= TRIAL_DAYS;
-}
-
-juce::Time LicenseManager::getTrialStartDate()
-{
-    return trialStartDate;
-}
-
-void LicenseManager::saveLicenseData()
+juce::File LicenseManager::getLicenseFile() const
 {
     auto appData = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory);
-    auto licenseFile = appData.getChildFile("AuricAudio").getChildFile(".aurichalo_lic");
-    
-    licenseFile.getParentDirectory().createDirectory();
-    
-    juce::XmlElement xml("License");
-    xml.setAttribute("key", encrypt(cachedLicenseKey));
-    xml.setAttribute("trial", (int)trialStartDate.toMilliseconds());
-    
-    xml.writeTo(licenseFile);
-}
-
-void LicenseManager::loadLicenseData()
-{
-    auto appData = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory);
-    auto licenseFile = appData.getChildFile("AuricAudio").getChildFile(".aurichalo_lic");
-    
-    if (!licenseFile.existsAsFile())
-        return;
-    
-    auto xml = juce::XmlDocument::parse(licenseFile);
-    if (xml != nullptr)
-    {
-        cachedLicenseKey = decrypt(xml->getStringAttribute("key"));
-        trialStartDate = juce::Time(xml->getIntAttribute("trial", 0));
-    }
-}
-
-juce::String LicenseManager::encrypt(const juce::String& data)
-{
-    // Simple XOR encryption (for basic obfuscation)
-    juce::MemoryBlock block(data.toUTF8(), data.getNumBytesAsUTF8());
-    
-    const char key[] = "AuricHaloSecret2024";
-    for (size_t i = 0; i < block.getSize(); ++i)
-    {
-        block[i] ^= key[i % (sizeof(key) - 1)];
-    }
-    
-    return block.toBase64Encoding();
-}
-
-juce::String LicenseManager::decrypt(const juce::String& data)
-{
-    juce::MemoryBlock block;
-    if (!block.fromBase64Encoding(data))
-        return {};
-    
-    const char key[] = "AuricHaloSecret2024";
-    for (size_t i = 0; i < block.getSize(); ++i)
-    {
-        block[i] ^= key[i % (sizeof(key) - 1)];
-    }
-    
-    return block.toString();
+    auto folder = appData.getChildFile("Auric Audio").getChildFile("Auric Halo");
+    // Don't create directory in const method
+    return folder.getChildFile("license.dat");
 }

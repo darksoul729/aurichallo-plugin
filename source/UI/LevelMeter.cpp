@@ -25,7 +25,8 @@ void LevelMeter::paint(juce::Graphics& g)
     
     // Calculate meter fill
     float meterHeight = bounds.getHeight() - 4.0f;
-    float fillHeight = displayLevel * meterHeight;
+    // fillHeight calculated but used in segment drawing below
+    juce::ignoreUnused(displayLevel, meterHeight);
     
     // Draw segments
     float segmentHeight = meterHeight / numSegments;

@@ -165,15 +165,15 @@ void AuricHaloProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mi
             
             // Create temporary buffer for oversampled processing
             juce::AudioBuffer<float> oversampledBuffer(
-                oversampledBlock.getNumChannels(),
-                oversampledBlock.getNumSamples()
+                static_cast<int>(oversampledBlock.getNumChannels()),
+                static_cast<int>(oversampledBlock.getNumSamples())
             );
             
             // Copy oversampled data to buffer
-            for (size_t ch = 0; ch < oversampledBlock.getNumChannels(); ++ch)
+            for (int ch = 0; ch < static_cast<int>(oversampledBlock.getNumChannels()); ++ch)
             {
                 auto* dest = oversampledBuffer.getWritePointer(ch);
-                auto* src = oversampledBlock.getChannelPointer(ch);
+                auto* src = oversampledBlock.getChannelPointer(static_cast<size_t>(ch));
                 std::copy(src, src + oversampledBlock.getNumSamples(), dest);
             }
             
@@ -183,9 +183,9 @@ void AuricHaloProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mi
             haloCompressor.process(oversampledBuffer);
             
             // Copy back to oversampled block
-            for (size_t ch = 0; ch < oversampledBlock.getNumChannels(); ++ch)
+            for (int ch = 0; ch < static_cast<int>(oversampledBlock.getNumChannels()); ++ch)
             {
-                auto* dest = oversampledBlock.getChannelPointer(ch);
+                auto* dest = oversampledBlock.getChannelPointer(static_cast<size_t>(ch));
                 auto* src = oversampledBuffer.getReadPointer(ch);
                 std::copy(src, src + oversampledBlock.getNumSamples(), dest);
             }
