@@ -1,0 +1,318 @@
+========================================
+  AURIC HALO - macOS BUILD GUIDE
+  (VST3, AU, Standalone)
+========================================
+
+SYSTEM REQUIREMENTS:
+--------------------
+✓ macOS 10.13 (High Sierra) atau lebih baru
+✓ Xcode 12+ (download dari App Store)
+✓ JUCE Framework (sudah ada di /JUCE/)
+✓ Command Line Tools (install via Xcode)
+
+========================================
+
+LANGKAH 1 - PERSIAPAN:
+-----------------------
+
+1. Install Xcode dari App Store
+2. Buka Terminal
+3. Install Command Line Tools:
+   
+   xcode-select --install
+
+4. Verify JUCE path:
+   
+   ls /JUCE/modules/juce_audio_plugin_client
+   
+   Kalau tidak ada, adjust path di Projucer
+
+========================================
+
+LANGKAH 2 - REGENERATE PROJECT:
+--------------------------------
+
+Di Mac, buka Terminal dan jalankan:
+
+cd /path/to/AuricHalo
+/Applications/Projucer.app/Contents/MacOS/Projucer --resave AuricHalo.jucer
+
+Atau double-click AuricHalo.jucer dan:
+- Tekan Cmd+Shift+S (Save Project)
+- Tunggu sampai selesai
+
+========================================
+
+LANGKAH 3 - BUILD DI XCODE:
+----------------------------
+
+1. Buka Xcode project:
+   
+   open Builds/MacOSX/AuricHalo.xcodeproj
+
+2. Pilih Scheme:
+   - AuricHalo - VST3
+   - AuricHalo - AU
+   - AuricHalo - Standalone
+   - AuricHalo - All (build semua sekaligus)
+
+3. Pilih Configuration:
+   - Product → Scheme → Edit Scheme
+   - Run → Build Configuration → Release
+
+4. Pilih Architecture:
+   - Product → Destination → Any Mac (Apple Silicon, Intel)
+   
+   Ini akan build Universal Binary (Intel + Apple Silicon)
+
+5. Build:
+   
+   Product → Build (Cmd+B)
+   
+   Atau build semua:
+   
+   Product → Build For → Running (Cmd+Shift+R)
+
+========================================
+
+LANGKAH 4 - BUILD VIA COMMAND LINE:
+------------------------------------
+
+Lebih cepat pakai xcodebuild:
+
+# Build VST3
+xcodebuild -project Builds/MacOSX/AuricHalo.xcodeproj \
+           -scheme "AuricHalo - VST3" \
+           -configuration Release \
+           -arch x86_64 -arch arm64 \
+           build
+
+# Build AU (Audio Unit)
+xcodebuild -project Builds/MacOSX/AuricHalo.xcodeproj \
+           -scheme "AuricHalo - AU" \
+           -configuration Release \
+           -arch x86_64 -arch arm64 \
+           build
+
+# Build Standalone
+xcodebuild -project Builds/MacOSX/AuricHalo.xcodeproj \
+           -scheme "AuricHalo - Standalone" \
+           -configuration Release \
+           -arch x86_64 -arch arm64 \
+           build
+
+# Build All (semua sekaligus)
+xcodebuild -project Builds/MacOSX/AuricHalo.xcodeproj \
+           -scheme "AuricHalo - All" \
+           -configuration Release \
+           -arch x86_64 -arch arm64 \
+           build
+
+========================================
+
+LANGKAH 5 - LOKASI OUTPUT:
+---------------------------
+
+Setelah build sukses, file ada di:
+
+VST3:
+~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+
+AU (Audio Unit):
+~/Library/Audio/Plug-Ins/Components/AuricHalo.component
+
+Standalone:
+Builds/MacOSX/build/Release/AuricHalo.app
+
+========================================
+
+LANGKAH 6 - CODE SIGNING (PENTING!):
+-------------------------------------
+
+Untuk distribusi, plugin HARUS di-sign:
+
+1. Get Developer ID Certificate:
+   - Daftar di Apple Developer Program ($99/year)
+   - Download certificate dari developer.apple.com
+   - Install ke Keychain
+
+2. Sign VST3:
+   
+   codesign --force --sign "Developer ID Application: Your Name" \
+            --timestamp \
+            --options runtime \
+            ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+
+3. Sign AU:
+   
+   codesign --force --sign "Developer ID Application: Your Name" \
+            --timestamp \
+            --options runtime \
+            ~/Library/Audio/Plug-Ins/Components/AuricHalo.component
+
+4. Sign Standalone:
+   
+   codesign --force --sign "Developer ID Application: Your Name" \
+            --timestamp \
+            --options runtime \
+            Builds/MacOSX/build/Release/AuricHalo.app
+
+5. Verify signature:
+   
+   codesign --verify --verbose ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+
+========================================
+
+LANGKAH 7 - NOTARIZATION (UNTUK DISTRIBUSI):
+---------------------------------------------
+
+macOS 10.15+ butuh notarization:
+
+1. Create DMG atau ZIP:
+   
+   ditto -c -k --keepParent \
+         ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3 \
+         AuricHalo-VST3.zip
+
+2. Upload ke Apple:
+   
+   xcrun notarytool submit AuricHalo-VST3.zip \
+                          --apple-id your@email.com \
+                          --team-id TEAMID \
+                          --password app-specific-password \
+                          --wait
+
+3. Staple notarization:
+   
+   xcrun stapler staple ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3
+
+========================================
+
+LANGKAH 8 - CREATE INSTALLER (PKG):
+------------------------------------
+
+Buat installer macOS:
+
+1. Create package:
+   
+   pkgbuild --root ~/Library/Audio/Plug-Ins \
+            --identifier com.auricaudio.aurichalo \
+            --version 1.0.0 \
+            --install-location /Library/Audio/Plug-Ins \
+            AuricHalo-Installer.pkg
+
+2. Sign package:
+   
+   productsign --sign "Developer ID Installer: Your Name" \
+                AuricHalo-Installer.pkg \
+                AuricHalo-Installer-Signed.pkg
+
+3. Notarize package (sama seperti di atas)
+
+========================================
+
+TROUBLESHOOTING:
+----------------
+
+ERROR: "juce_audio_plugin_client not found"
+FIX: Regenerate Projucer (module sudah ditambahkan)
+
+ERROR: "Code signature invalid"
+FIX: Sign dengan Developer ID certificate
+
+ERROR: "Plugin damaged and can't be opened"
+FIX: Notarize plugin dengan Apple
+
+ERROR: "Architecture mismatch"
+FIX: Build dengan -arch x86_64 -arch arm64
+
+ERROR: "AU validation failed"
+FIX: 
+- Pastikan pluginAUMainType benar
+- Run: auval -v aufx AuHa Aurc
+
+========================================
+
+TESTING:
+--------
+
+1. Test VST3:
+   - Buka Logic Pro, Ableton, atau Reaper
+   - Scan plugin
+   - Load Auric Halo
+
+2. Test AU:
+   - Buka Logic Pro atau GarageBand
+   - Audio FX → Auric Audio → Auric Halo
+
+3. Test Standalone:
+   - Double-click AuricHalo.app
+   - Test audio input/output
+
+4. Validate AU:
+   
+   auval -v aufx AuHa Aurc
+
+========================================
+
+DISTRIBUTION:
+-------------
+
+1. Create DMG:
+   - Drag VST3, AU, Standalone ke DMG
+   - Add README dan LICENSE
+   - Sign dan notarize DMG
+
+2. Upload ke:
+   - Website sendiri
+   - Plugin Boutique
+   - Gumroad
+   - Splice
+
+========================================
+
+ARCHITECTURE SUPPORT:
+---------------------
+
+Universal Binary (Intel + Apple Silicon):
+✓ x86_64 (Intel Mac)
+✓ arm64 (Apple Silicon M1/M2/M3)
+
+Deployment Target:
+✓ macOS 10.13+ (High Sierra dan lebih baru)
+
+========================================
+
+QUICK BUILD SCRIPT:
+-------------------
+
+Buat file: scripts/build_mac.sh
+
+#!/bin/bash
+cd "$(dirname "$0")/.."
+xcodebuild -project Builds/MacOSX/AuricHalo.xcodeproj \
+           -scheme "AuricHalo - All" \
+           -configuration Release \
+           -arch x86_64 -arch arm64 \
+           build
+echo "Build complete!"
+echo "VST3: ~/Library/Audio/Plug-Ins/VST3/AuricHalo.vst3"
+echo "AU: ~/Library/Audio/Plug-Ins/Components/AuricHalo.component"
+
+Jalankan:
+chmod +x scripts/build_mac.sh
+./scripts/build_mac.sh
+
+========================================
+
+FILE SUDAH DIPERBAIKI:
+----------------------
+
+✓ AuricHalo.jucer - Module plugin client ditambahkan
+✓ MODULEPATHS - Sudah include juce_audio_plugin_client
+✓ Architecture - Universal Binary (Intel + Apple Silicon)
+✓ Deployment Target - macOS 10.13+
+
+SEKARANG BUILD DI MAC AKAN SUKSES!
+
+========================================
