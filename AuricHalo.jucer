@@ -4,12 +4,12 @@
               useAppConfig="0" jucerFormatVersion="1" pluginFormats="buildAAX,buildAU,buildStandalone,buildVST3"
               version="1.0.0" companyName="Auric Audio" pluginManufacturerCode="Aurc"
               pluginCode="AuHa" pluginChannelConfigs="{1,1},{2,2}" pluginIsSynth="0"
-              pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0"
-              pluginVST3Category="Fx" pluginEditorRequiresKeys="0"
-              pluginAUExportPrefix="AuricHaloAU" pluginAUMainType="'aufx'"
-              pluginRTASCategory="2" aaxIdentifier="com.auricaudio.aurichalo"
+              pluginWantsMidiIn="1" pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0"
+              pluginVST3Category="Fx" pluginEditorRequiresKeys="0" pluginAUExportPrefix="AuricHaloAU"
+              pluginAUMainType="'aufx'" pluginRTASCategory="2" aaxIdentifier="com.auricaudio.aurichalo"
               pluginAAXCategory="2" bundleIdentifier="com.auricaudio.aurichalo"
-              pluginAAXDisableBypass="0" pluginAAXDisableMultiMono="0" enableIAA="0">
+              pluginAAXDisableBypass="0" pluginAAXDisableMultiMono="0" enableIAA="0"
+              pluginCharacteristicsValue="pluginWantsMidiIn">
   <MAINGROUP id="MainGrp" name="AuricHalo">
     <GROUP id="{DSP001}" name="DSP">
       <FILE id="dsp001" name="HaloEQ.cpp" compile="1" file="source/DSP/HaloEQ.cpp"/>
@@ -44,6 +44,8 @@
       <FILE id="src006" name="AuricHaloEditor.h" compile="0" file="source/AuricHaloEditor.h"/>
       <FILE id="src007" name="LicenseManager.cpp" compile="1" file="source/LicenseManager.cpp"/>
       <FILE id="src008" name="LicenseManager.h" compile="0" file="source/LicenseManager.h"/>
+      <FILE id="src009" name="StandaloneApp.cpp" compile="1" resource="0"
+            file="source/StandaloneApp.cpp" compilerFlagSchemes="Standalone"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
@@ -52,6 +54,8 @@
     <MODULE id="juce_audio_formats" useGlobalPath="1"/>
     <MODULE id="juce_audio_plugin_client" useGlobalPath="1"/>
     <MODULE id="juce_audio_processors" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
     <MODULE id="juce_audio_utils" useGlobalPath="1"/>
     <MODULE id="juce_core" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" useGlobalPath="1"/>
@@ -81,9 +85,11 @@
         <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
-    <XCODE_MAC targetFolder="Builds/MacOSX" xcodeValidArchs="x86_64,arm64">
+    <XCODE_MAC targetFolder="Builds/MacOSX" xcodeValidArchs="x86_64,arm64"
+               plistPreprocessorDefinitions="NSMicrophoneUsageDescription=AuricHalo needs access to your microphone to process audio input">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" targetName="AuricHalo" macOSDeploymentTarget="10.13"/>
         <CONFIGURATION name="Release" isDebug="0" targetName="AuricHalo" macOSDeploymentTarget="10.13"
@@ -103,8 +109,10 @@
         <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
-  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JucePlugin_Build_VST="0"/>
+  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JucePlugin_Build_VST="0" JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP="1"
+               JUCE_STANDALONE_FILTER_WINDOW_USE_KIOSK_MODE="0"/>
 </JUCERPROJECT>
